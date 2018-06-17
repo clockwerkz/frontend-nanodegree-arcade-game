@@ -32,8 +32,8 @@ const Player = function() {
 }
 
 Player.prototype.handleInput = function(keyCode) {
-    console.log(keycode);
-    switch (keycode) {
+    console.log(keyCode);
+    switch (keyCode) {
         case(37):
             this.x-=100;
             break;
