@@ -1,8 +1,10 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(startingY) {
+    console.log(startingY);
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-
+    this.x = -100;
+    this.y = startingY;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -14,6 +16,11 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    if (this.x<500) {
+        this.x=this.x+ (200*dt);
+    } else {
+        this.x=-100;
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -32,20 +39,20 @@ const Player = function() {
 }
 
 Player.prototype.handleInput = function(keyCode) {
-    console.log(keyCode);
     switch (keyCode) {
-        case(37):
-            this.x-=100;
+        case('left'):
+        if (this.x > 0) this.x-=100;
             break;
-        case(38):
-            this.y+=100;
+        case('up'):
+        if (this.y > 0) this.y-=100;
             break;
-        case(39):
-            this.x+=100;
+        case('right'):
+            if (this.x < 400) this.x+=100;
             break;
-        case(40):
-            this.y-=100;
-    }        
+        case('down'):
+        if (this.y < 400) this.y+=100;
+    }   
+    console.log(this.x, this.y);     
 }
 
 Player.prototype.update = function() {
@@ -56,12 +63,14 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-
+function startingYPos() {
+    return (Math.floor(Math.random()*3))*80+60;
+}
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-const allEnemies = [new Enemy(), new Enemy() ];
+const allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
 
 const player = new Player();
 
