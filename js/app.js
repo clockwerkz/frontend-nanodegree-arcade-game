@@ -26,11 +26,26 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 const Player = function() {
- 
+    this.sprite = 'images/char-boy.png';
+    this.x = 200;
+    this.y = 400;
 }
 
-Player.prototype.handleInput = handleInput = function(keyCode) {
-    console.log(keyCode);
+Player.prototype.handleInput = function(keyCode) {
+    console.log(keycode);
+    switch (keycode) {
+        case(37):
+            this.x-=100;
+            break;
+        case(38):
+            this.y+=100;
+            break;
+        case(39):
+            this.x+=100;
+            break;
+        case(40):
+            this.y-=100;
+    }        
 }
 
 Player.prototype.update = function() {
@@ -38,7 +53,7 @@ Player.prototype.update = function() {
 }
 
 Player.prototype.render = function() {
-   // ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 
