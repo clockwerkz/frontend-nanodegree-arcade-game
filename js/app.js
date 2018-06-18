@@ -1,10 +1,11 @@
 // Enemies our player must avoid
 var Enemy = function(startingY) {
-    console.log(startingY);
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     this.x = -100;
     this.y = startingY;
+    this.height=35;
+    this.width=50;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -17,10 +18,15 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     if (this.x<500) {
-        this.x=this.x+ (200*dt);
+        this.x=this.x+(200*dt);
     } else {
         this.x=-100;
     }
+    if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
+       &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) {
+           player.reset();
+       }
+     
 };
 
 // Draw the enemy on the screen, required method for game
@@ -36,26 +42,33 @@ const Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
     this.y = 400;
+    this.isMoving = false;
 }
 
 Player.prototype.handleInput = function(keyCode) {
+
+      
     switch (keyCode) {
         case('left'):
         if (this.x > 0) this.x-=100;
             break;
         case('up'):
-        if (this.y > 0) this.y-=100;
+            if (this.y > 0) this.y-=100;
             break;
         case('right'):
             if (this.x < 400) this.x+=100;
             break;
         case('down'):
-        if (this.y < 400) this.y+=100;
-    }   
-    console.log(this.x, this.y);     
+            if (this.y < 400) this.y+=100;
+        }       
 }
 
-Player.prototype.update = function() {
+Player.prototype.reset = function() {
+    this.x = 200;
+    this.y = 400;
+}
+
+Player.prototype.update = function(dt) {
 
 }
 
@@ -64,15 +77,17 @@ Player.prototype.render = function() {
 };
 
 function startingYPos() {
-    return (Math.floor(Math.random()*3))*80+60;
+    return (Math.floor(Math.random()*4))*80+120;
 }
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
+const player = new Player();
+
 const allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
 
-const player = new Player();
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
