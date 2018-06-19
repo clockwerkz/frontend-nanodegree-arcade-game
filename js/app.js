@@ -41,7 +41,7 @@ Enemy.prototype.render = function() {
 const Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
-    this.y = 400;
+    this.y = 380;
     this.isMoving = false;
 }
 
@@ -53,19 +53,19 @@ Player.prototype.handleInput = function(keyCode) {
         if (this.x > 0) this.x-=100;
             break;
         case('up'):
-            if (this.y > 0) this.y-=100;
+            if (this.y > 0) this.y-=80;
             break;
         case('right'):
             if (this.x < 400) this.x+=100;
             break;
         case('down'):
-            if (this.y < 400) this.y+=100;
+            if (this.y < 400) this.y+=80;
         }       
 }
 
 Player.prototype.reset = function() {
     this.x = 200;
-    this.y = 400;
+    this.y = 380;
 }
 
 Player.prototype.update = function(dt) {
