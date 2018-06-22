@@ -13,7 +13,9 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [ ] Display Current Health on the HUD
 - [ ] Scoring System
 - [ ] Display Scoring System
+- [ ] Gem Collision/Scoring
 - [ ] Game Over Modal
+- [ ] Gameplay: Levels? Refine Game mechanics (Break this category up)
 
 
 ### WishList
