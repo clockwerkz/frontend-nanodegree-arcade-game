@@ -1,3 +1,10 @@
+# BUGS -N- GEMS GAME
+## Grab the gems. Avoid the bugs. Profit!
+
+### Classic Arcade Game Clone Udacity Project #3
+
+This is my repository for Udacity's GitHub Project #3, the classic arcade game clone. The project involves using a provided basic game engine (utilizes HTML Canvas) to create game assets, and provide the logic and control for these assets.
+
 frontend-nanodegree-arcade-game
 ===============================
 
