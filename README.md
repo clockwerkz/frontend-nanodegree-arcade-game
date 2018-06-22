@@ -5,6 +5,27 @@
 
 This is my repository for Udacity's GitHub Project #3, the classic arcade game clone. The project involves using a provided basic game engine (utilizes HTML Canvas) to create game assets, and provide the logic and control for these assets.
 
+### TODO
+- [ ] Refine collision system : [2D Collision Detection](https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection)
+- [ ] Selection Screen before game begins
+- [ ] Game Display (HUD) over the game board
+- [ ] Player Health tracking
+- [ ] Display Current Health on the HUD
+- [ ] Scoring System
+- [ ] Display Scoring System
+- [ ] Game Over Modal
+
+
+### WishList
+- [ ] LocalStorage High Score tracker
+- [ ] High Score API to record and maintain a permanent list of high scores
+
+
+### Resources
+
+#### Font: Press Start 2P 
+[Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) - Google Font
+
 frontend-nanodegree-arcade-game
 ===============================
 
