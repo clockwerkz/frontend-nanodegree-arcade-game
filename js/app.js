@@ -23,8 +23,9 @@ Enemy.prototype.update = function(dt) {
         this.x=-100;
     }
     if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
-       &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) {
-           player.reset();
+       &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) 
+       {
+           player.isHit();
        }
      
 };
@@ -40,29 +41,47 @@ Enemy.prototype.render = function() {
 
 
 const Player = function() {
+    // this.moveStateType = {
+    //     STANDING : 0,
+    //     MOVING_LEFT : 1,
+    //     MOVING_RIGHT : 2,
+    //     MOVING_UP : 3,
+    //     MOVING_DOWN  : 4
+    // };
+    //this.moveState = moveStateType.STANDING;
+    this.isMoving = false;
     this.sprite = 'images/char-boy.png';
+    this.spriteInjured = 'images/char-boy_injured.png';
     this.x = 200;
     this.y = 380;
     this.yTarget=380;
     this.xTarget=200;
+    this.injured = false;
+}
+
+Player.prototype.isHit = function () {
+    this.injured = true;
+    player.reset();
 }
 
 Player.prototype.handleInput = function(keyCode) {
 
-      
-    switch (keyCode) {
-        case('left'):
-        if (this.xTarget > 0) this.xTarget-=100;
-            break;
-        case('up'):
-            if (this.yTarget > 0) this.yTarget-=80;
-            break;
-        case('right'):
-            if (this.xTarget < 400) this.xTarget+=100;
-            break;
-        case('down'):
-            if (this.yTarget < 400) this.yTarget+=80;
-        }       
+    if (!this.isMoving) {
+        this.isMoving = true;
+        switch (keyCode) {
+            case('left'):
+            if (this.xTarget > 0) this.xTarget-=100;
+                break;
+            case('up'):
+                if (this.yTarget > 0) this.yTarget-=80;
+                break;
+            case('right'):
+                if (this.xTarget < 400) this.xTarget+=100;
+                break;
+            case('down'):
+                if (this.yTarget < 400) this.yTarget+=80;
+            }       
+    }
 }
 
 Player.prototype.reset = function() {
@@ -77,11 +96,13 @@ Player.prototype.update = function(dt) {
     if (this.y < this.yTarget) this.y= this.y+5;
     if (this.x > this.xTarget) this.x= this.x-5;
     if (this.x < this.xTarget) this.x= this.x+5;
+    if (this.x === this.xTarget && this.y === this.yTarget) this.isMoving = false;
     
 }
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    //this.fillStyle = 'rgb(255,0,0)';
 };
 
 function startingYPos() {
