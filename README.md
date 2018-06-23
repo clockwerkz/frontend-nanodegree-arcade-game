@@ -9,8 +9,8 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [ ] Refine collision system : [2D Collision Detection](https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection)
 - [ ] Selection Screen before game begins
 - [ ] Game Display (HUD) over the game board
-- [ ] Player Health tracking
-- [ ] Display Current Health on the HUD
+- [ ] Player Lives tracking
+- [ ] Display Lives Left on the HUD
 - [ ] Scoring System
 - [ ] Display Scoring System
 - [ ] Gem Collision/Scoring
