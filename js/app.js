@@ -38,11 +38,13 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
+
 const Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
     this.y = 380;
-    this.isMoving = false;
+    this.yTarget=380;
+    this.xTarget=200;
 }
 
 Player.prototype.handleInput = function(keyCode) {
@@ -50,26 +52,32 @@ Player.prototype.handleInput = function(keyCode) {
       
     switch (keyCode) {
         case('left'):
-        if (this.x > 0) this.x-=100;
+        if (this.xTarget > 0) this.xTarget-=100;
             break;
         case('up'):
-            if (this.y > 0) this.y-=80;
+            if (this.yTarget > 0) this.yTarget-=80;
             break;
         case('right'):
-            if (this.x < 400) this.x+=100;
+            if (this.xTarget < 400) this.xTarget+=100;
             break;
         case('down'):
-            if (this.y < 400) this.y+=80;
+            if (this.yTarget < 400) this.yTarget+=80;
         }       
 }
 
 Player.prototype.reset = function() {
     this.x = 200;
     this.y = 380;
+    this.yTarget=380;
+    this.xTarget=200;
 }
 
 Player.prototype.update = function(dt) {
-
+    if (this.y > this.yTarget) this.y= this.y-5;
+    if (this.y < this.yTarget) this.y= this.y+5;
+    if (this.x > this.xTarget) this.x= this.x-5;
+    if (this.x < this.xTarget) this.x= this.x+5;
+    
 }
 
 Player.prototype.render = function() {
