@@ -28,6 +28,9 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 #### Font: Press Start 2P 
 [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) - Google Font
 
+#### Finite State Machine Design Pattern
+[Game Programming Patterns Chapter](http://gameprogrammingpatterns.com/state.html)
+
 frontend-nanodegree-arcade-game
 ===============================
 
