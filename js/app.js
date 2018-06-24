@@ -16,7 +16,6 @@ characterSelection.addEventListener("click", (e)=> {
 btnStart.addEventListener('click', ()=> {
     const gameStart = document.getElementById('gameStart');
     gameStart.classList.add('hide');
-    const currentSelection = characterSelection.querySelector(".selected");
 });
 
 
@@ -42,6 +41,7 @@ Enemy.prototype.update = function(dt) {
     if (this.x<500) {
         this.x=this.x+(200*dt);
     } else {
+        this.y=startingYPos();
         this.x=-100;
     }
     if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
@@ -126,19 +126,17 @@ Player.prototype.render = function() {
     //this.fillStyle = 'rgb(255,0,0)';
 };
 
-const player = new Player();
+
 
 function startingYPos() {
-    return (Math.floor(Math.random()*4))*80+120;
+    return (Math.floor(Math.random()*4))*82+150;
 }
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-
-
+const player = new Player();
 const allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
-
 
 
 // This listens for key presses and sends the keys to your
