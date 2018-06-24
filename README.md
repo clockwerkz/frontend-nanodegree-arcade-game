@@ -1,5 +1,6 @@
 # BUGS -N- GEMS GAME
 Grab the gems. Avoid the bugs. Profit!
+Play it here: [Bugs -N- Gems](https://clockwerkz.github.io/frontend-nanodegree-arcade-game/)
 
 ## Classic Arcade Game Clone Udacity Project #3
 
