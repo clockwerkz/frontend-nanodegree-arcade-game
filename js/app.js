@@ -1,3 +1,25 @@
+// Game Start Modal
+const characterSelection = document.querySelector(".character-selection");
+const btnStart = document.querySelector('.btn-start');
+gameBoard = document.getElementById("gameBoard");
+
+characterSelection.addEventListener("click", (e)=> {
+    if (e.target.nodeName==='IMG') {
+        const currentSelection = characterSelection.querySelector(".selected");
+        if (e.target !== currentSelection) {
+            currentSelection.classList.remove("selected");
+            e.target.classList.add('selected');
+        }
+    }
+});
+
+btnStart.addEventListener('click', ()=> {
+    const gameStart = document.getElementById('gameStart');
+    gameStart.classList.add('hide');
+    const currentSelection = characterSelection.querySelector(".selected");
+});
+
+
 // Enemies our player must avoid
 var Enemy = function(startingY) {
     // Variables applied to each of our instances go here,
@@ -39,7 +61,6 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
-
 const Player = function() {
     // this.moveStateType = {
     //     STANDING : 0,
@@ -51,7 +72,7 @@ const Player = function() {
     //this.moveState = moveStateType.STANDING;
     this.isMoving = false;
     this.sprite = 'images/char-boy.png';
-    this.spriteInjured = 'images/char-boy_injured.png';
+    //this.spriteInjured = 'images/char-boy_injured.png';
     this.x = 200;
     this.y = 380;
     this.yTarget=380;
@@ -105,6 +126,8 @@ Player.prototype.render = function() {
     //this.fillStyle = 'rgb(255,0,0)';
 };
 
+const player = new Player();
+
 function startingYPos() {
     return (Math.floor(Math.random()*4))*80+120;
 }
@@ -112,7 +135,7 @@ function startingYPos() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-const player = new Player();
+
 
 const allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
 

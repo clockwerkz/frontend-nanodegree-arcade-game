@@ -8,9 +8,23 @@
 <body>
     <div id="gameStart" class="modal">
         <div class="modal-body">
+            <img src="images/Gem Blue.png" class="gem gem-left"/>
+            <img src="images/Gem Orange.png" class="gem gem-right"/>
             <h1>Bugs -N- Gems</h1>
-        </div>
-    </div>
+            <p>Get the Gems. Avoid the Bugs. Profit!</p>
+            <h2>Select Your Character:</h2>
+            <div class="character-selection">
+                <img src="images/char-cat-girl.png" />
+                <img src="images/char-horn-girl.png" />
+                <img src="images/char-boy.png" class="selected"/>
+                <img src="images/char-pink-girl.png" />
+                <img src="images/char-princess-girl.png" />
+            </div> <!-- character-selection-->
+            <a class="btn btn-start">Start Game</a>
+        </div> <!-- modal-body -->
+    </div> <!-- #gameStart -->
+
+    <div id="gameBoard"></div>
 
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
