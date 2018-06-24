@@ -1,7 +1,8 @@
 // Game Start Modal
 const characterSelection = document.querySelector(".character-selection");
 const btnStart = document.querySelector('.btn-start');
-gameBoard = document.getElementById("gameBoard");
+let gameStarted = false;
+
 
 characterSelection.addEventListener("click", (e)=> {
     if (e.target.nodeName==='IMG') {
@@ -16,6 +17,9 @@ characterSelection.addEventListener("click", (e)=> {
 btnStart.addEventListener('click', ()=> {
     const gameStart = document.getElementById('gameStart');
     gameStart.classList.add('hide');
+    gameStarted=true;
+    player.sprite = document.querySelector('.selected').dataset.value;
+    console.log(player.sprite);
 });
 
 
@@ -38,18 +42,20 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    if (this.x<500) {
-        this.x=this.x+(200*dt);
-    } else {
-        this.y=startingYPos();
-        this.x=-100;
+    if (gameStarted)
+    {
+        if (this.x<500) {
+            this.x=this.x+(200*dt);
+        } else {
+            this.y=startingYPos();
+            this.x=-100;
+        }
+        if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
+        &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) 
+        {
+            player.isHit();
+        }
     }
-    if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
-       &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) 
-       {
-           player.isHit();
-       }
-     
 };
 
 // Draw the enemy on the screen, required method for game
@@ -123,7 +129,6 @@ Player.prototype.update = function(dt) {
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    //this.fillStyle = 'rgb(255,0,0)';
 };
 
 
