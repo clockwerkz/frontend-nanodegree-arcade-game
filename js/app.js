@@ -15,12 +15,19 @@ characterSelection.addEventListener("click", (e)=> {
 });
 
 btnStart.addEventListener('click', ()=> {
+    gameHasStarted();
+});
+
+function gameHasStarted () {
     const gameStart = document.getElementById('gameStart');
+    const gameScreen = document.getElementById('game-screen');
     gameStart.classList.add('hide');
     gameStarted=true;
     player.sprite = document.querySelector('.selected').dataset.value;
-    console.log(player.sprite);
-});
+    gameScreen.querySelector('.life-count').textContent = player.lives;
+    gameScreen.querySelector('.current-score').textContent = player.score;
+
+}
 
 
 // Enemies our player must avoid
@@ -53,10 +60,15 @@ Enemy.prototype.update = function(dt) {
         if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
         &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) 
         {
-            player.isHit();
+            handleHit();
         }
     }
 };
+
+function handleHit() {
+    player.isHit();
+    allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
+}
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -66,6 +78,10 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+
+function updateScore() {
+    document.querySelector('.current-score').textContent = player.score;
+}
 
 const Player = function() {
     // this.moveStateType = {
@@ -84,12 +100,25 @@ const Player = function() {
     this.yTarget=380;
     this.xTarget=200;
     this.injured = false;
+    this.lives = 3;
+    this.score = 0;
 }
 
 Player.prototype.isHit = function () {
     this.injured = true;
+    this.lives-=1;
+    document.querySelector('.life-count').textContent = player.lives;
+    if (this.lives === 0) gameOver();
     player.reset();
 }
+
+function gameOver() {
+    document.getElementById('game-screen').classList.add('hide');
+    document.querySelector('#game-over .score-info').textContent = player.score;
+    document.getElementById('game-over').classList.remove('hide');
+    
+}
+
 
 Player.prototype.handleInput = function(keyCode) {
 
@@ -100,7 +129,13 @@ Player.prototype.handleInput = function(keyCode) {
             if (this.xTarget > 0) this.xTarget-=100;
                 break;
             case('up'):
-                if (this.yTarget > 0) this.yTarget-=80;
+                if (this.yTarget > 0) {
+                    this.yTarget-=80;
+                } else {
+                    this.score+=100;
+                    updateScore();
+                    this.reset();
+                }
                 break;
             case('right'):
                 if (this.xTarget < 400) this.xTarget+=100;
@@ -134,14 +169,14 @@ Player.prototype.render = function() {
 
 
 function startingYPos() {
-    return (Math.floor(Math.random()*4))*82+150;
+    return (Math.floor(Math.random()*4))*82+66;
 }
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
 const player = new Player();
-const allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
+let allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
 
 
 // This listens for key presses and sends the keys to your

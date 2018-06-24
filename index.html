@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+
+    <!-- GAME START SCREEN -->
+
     <div id="gameStart" class="modal">
         <div class="modal-body">
             <img src="images/Gem Blue.png" class="gem gem-left"/>
@@ -23,12 +27,35 @@
             <a class="btn btn-start">Start Game</a>
         </div> <!-- modal-body -->
     </div> <!-- #gameStart -->
+
+
+    <!-- GAMEPLAY SCREEN -->
+
     <div id="game-screen">
         <div class="score-panel">
             <h1>Score Panel Block-In</h1>
-        </div>
+            <div class="player-info">
+                <div class="lives-info">
+                    <p><span class="life-count">3</span> Lives Remaining</p>
+                </div> <!-- .lives-info -->
+                <div class="score-info">
+                    <p><span class="current-score">0</span></p>
+                </div> <!-- .score-info -->
+            </div> <!-- .player-info -->
+        </div> <!-- .score-panel -->
         <div id="gameBoard"></div>
-    </div> <!-- #score-screen -->
+    </div> <!-- #game-screen -->
+
+
+    <!-- GAME OVER SCREEN -->
+
+    <div class="hide" id="game-over">
+        <div class="modal-body">
+            <h1>Game Over!</h1>
+            <p>Final Score is: <span class="score-info">Score</span></p>
+            <a class="btn">Play Again?</a>
+        </div>
+    </div>
 
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>

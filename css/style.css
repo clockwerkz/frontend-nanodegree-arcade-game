@@ -4,6 +4,7 @@ body {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
     background-color: #333;
+    overflow: hidden;
 }
 
 /* START SCREEN MODAL */

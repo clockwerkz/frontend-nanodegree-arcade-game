@@ -10,14 +10,15 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [ ] Refine collision system : [2D Collision Detection](https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection)
 - [x] Selection Screen before game begins
 - [x] Character Interpolates to new position, doesn't just pop to it.
-- [ ] Game Display (HUD) over the game board
-- [ ] Player Lives tracking
-- [ ] Display Lives Left on the HUD
-- [ ] Scoring System
-- [ ] Display Scoring System
+- [x] Game Display (HUD) over the game board
+- [x] Player Lives tracking
+- [x] Display Lives Left on the HUD
+- [x] Scoring System
+- [x] Display Scoring System
 - [ ] Gem Collision/Scoring
-- [ ] Game Over Modal
+- [x] Game Over Modal
 - [ ] Gameplay: Levels? Refine Game mechanics (Break this category up)
+- [ ] Refactor JavaScript code
 
 
 ### WishList
