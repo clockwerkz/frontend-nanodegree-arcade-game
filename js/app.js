@@ -14,6 +14,24 @@ characterSelection.addEventListener("click", (e)=> {
     }
 });
 
+const btnEnd = document.querySelector('#game-over .btn');
+btnEnd.addEventListener('click', ()=> {
+    clearEnemies();
+    gameRestart();
+});
+
+
+function gameRestart() {
+    player.lives = 3;
+    player.score = 0;
+    updateScore();
+    document.querySelector('.life-count').textContent = player.lives;
+    document.getElementById('game-screen').classList.remove('hide');
+    document.querySelector('#game-over .score-info').textContent = player.score;
+    document.getElementById('game-over').classList.add('hide');
+    gameStarted=true;
+}
+
 btnStart.addEventListener('click', ()=> {
     gameHasStarted();
 });
@@ -113,10 +131,16 @@ Player.prototype.isHit = function () {
 }
 
 function gameOver() {
+    gameStarted = false;
+    clearEnemies();
     document.getElementById('game-screen').classList.add('hide');
     document.querySelector('#game-over .score-info').textContent = player.score;
     document.getElementById('game-over').classList.remove('hide');
     
+}
+
+function clearEnemies() {
+    allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
 }
 
 
