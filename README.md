@@ -1,5 +1,6 @@
 # BUGS -N- GEMS GAME
 Grab the gems. Avoid the bugs. Profit!
+
 Play it here: [Bugs -N- Gems](https://clockwerkz.github.io/frontend-nanodegree-arcade-game/)
 
 ## Classic Arcade Game Clone Udacity Project #3
@@ -15,13 +16,24 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [x] Display Lives Left on the HUD
 - [x] Scoring System
 - [x] Display Scoring System
+- [ ] Gem Spawning
 - [ ] Gem Collision/Scoring
 - [x] Game Over Modal
 - [ ] Gameplay: Levels? Refine Game mechanics (Break this category up)
-- [ ] Refactor JavaScript code
+
+- [ ] Refactor JavaScript code:
+    - [ ] Use modular pattern: Create Game Object that will keep track of player lives and scoring rather than having that tracked on the   player object
+
+
+### Game Design Doc
+
+What happens when the player gets to the top of the screen? Game resets to a new level and enemies spawn with a slightly harder difficulty? Or does the game screen scroll up and reveal another section? <br>
+Potential use of keys in the game? What if the exit was a doorway that is initially closed when the level begins, and the player has to obtain the key in the level in order to unlock and open the exit? <br>
+Gems provide bonus points, but there could also be power ups and extra life spawning in the game.
 
 
 ### WishList
+
 - [ ] LocalStorage High Score tracker
 - [ ] High Score API to record and maintain a permanent list of high scores
 
@@ -29,10 +41,15 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 ### Resources
 
 #### Font: Press Start 2P 
+
 [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) - Google Font
 
 #### Finite State Machine Design Pattern
+
 [Game Programming Patterns Chapter](http://gameprogrammingpatterns.com/state.html)
+
+
+
 
 frontend-nanodegree-arcade-game
 ===============================

@@ -41,6 +41,7 @@ function gameHasStarted () {
     const gameScreen = document.getElementById('game-screen');
     gameStart.classList.add('hide');
     gameStarted=true;
+    gameScreen.classList.remove('hide');
     player.sprite = document.querySelector('.selected').dataset.value;
     gameScreen.querySelector('.life-count').textContent = player.lives;
     gameScreen.querySelector('.current-score').textContent = player.score;
@@ -213,5 +214,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    if (gameStarted) player.handleInput(allowedKeys[e.keyCode]);
 });
