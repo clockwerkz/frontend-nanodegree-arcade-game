@@ -36,6 +36,7 @@ Gems provide bonus points, but there could also be power ups and extra life spaw
 
 - [ ] LocalStorage High Score tracker
 - [ ] High Score API to record and maintain a permanent list of high scores
+- [ ] Sound Effects?
 
 
 ### Resources
