@@ -1,7 +1,7 @@
 // Game Start Modal
 const characterSelection = document.querySelector(".character-selection");
 const btnStart = document.querySelector('.btn-start');
-let gameStarted = false;
+// let gameStarted = false;
 
 
 characterSelection.addEventListener("click", (e)=> {
@@ -21,16 +21,16 @@ btnEnd.addEventListener('click', ()=> {
 });
 
 
-function gameRestart() {
-    player.lives = 3;
-    player.score = 0;
-    updateScore();
-    document.querySelector('.life-count').textContent = player.lives;
-    document.getElementById('game-screen').classList.remove('hide');
-    document.querySelector('#game-over .score-info').textContent = player.score;
-    document.getElementById('game-over').classList.add('hide');
-    gameStarted=true;
-}
+// function gameRestart() {
+//     player.lives = 3;
+//     player.score = 0;
+//     updateScore();
+//     document.querySelector('.life-count').textContent = player.lives;
+//     document.getElementById('game-screen').classList.remove('hide');
+//     document.querySelector('#game-over .score-info').textContent = player.score;
+//     document.getElementById('game-over').classList.add('hide');
+//     gameStarted=true;
+// }
 
 btnStart.addEventListener('click', ()=> {
     gameHasStarted();
@@ -48,6 +48,119 @@ function gameHasStarted () {
 
 }
 
+const screenView = (function() {
+    /* Main Screen Display */
+    const gameStart = document.getElementById('gameStart'); /* TODO: change this to game-start for naming consistency */
+    const gameScreen = document.getElementById('game-screen');
+    const gameOver = document.getElementById('game-over');
+
+    /* Score and lives */
+    const scoreInfo = document.querySelectorAll('.score-info');
+    const livesCount = document.querySelector('.life-count');
+
+    const updateLifeCounter = (lives)=> {
+        livesCount.textContent = lives;
+    }
+
+    const updateScores = (score) => {
+        scoreInfo.forEach( scoreScreen => scoreScreen.textContent = score );
+    }
+
+    const showGameOver = () => {
+        gameScreen.classList.toggle('hide');
+        gameOver.classList.toggle('hide');
+    }
+
+    const redisplayGame = () => {
+        gameScreen.classList.toggle('hide');
+        gameOver.classList.toggle('hide');
+    }
+
+
+    return {
+        updateLifeCounter,
+        updateScores,
+        showGameOver,
+        redisplayGame
+    };
+
+})();
+
+const gameController = (function() {
+    let lives = 3;
+    let score = 0;
+    gameStarted = false;
+    numberOfEnemies = 2;
+    const player;
+    const allEnemies = []; [new Enemy(startingPos()), new Enemy(startingPos()) ];
+
+    const init = () => {
+        player = new Player();
+        createEnemies();
+    }
+
+    /* Player is Hit by Enemy */
+    const playerHit = () => {
+        lives-=1;
+        screenView.updateLifeCounter(lives);
+        if (this.lives === 0) {
+            gameOver();
+        } else {
+            player.reset();
+            createEnemies();
+        }
+    }
+
+    // function handleHit() {
+    //     isHit();
+    //     allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
+    // }
+
+    const gameOver = () => {
+        gameStarted = false;
+        clearEnemies();
+        screenView.updateScores(score);
+        screenView.showGameOver();
+        
+    }
+    
+    const gameRestart = () => {
+        lives = 3;
+        score = 0;
+        screenView.updateScores(score);
+        screenView.updateLifeCounter(lives);
+        gameView.redisplayGame();
+        gameStarted=true;
+        startEnemyMovement();
+    }
+
+    const hasGameStarted = ()=> {
+        return gameStarted;
+    }
+
+    /* Helper Functions */
+    const startingPos =  () => {
+        return (Math.floor(Math.random()*4))*83+66;
+    }
+
+    const startEnemyMovement = () => {
+        allEnemies.forEach( enemy => enemy.isMoving = true );
+    }
+
+    const stopAllEnemyMovement = () => {
+        allEnemies.forEach( enemy => enemy.isMoving = false );
+    }
+
+    const createEnemies = () => {
+        for (let i=0; i<numberOfEnemies; i++) allEnemies(push(new Enemy(startingPos())));
+    }
+
+    return {
+        playerHit,
+        hasGameStarted,
+        gameRestart
+    }
+})().init();
 
 // Enemies our player must avoid
 var Enemy = function(startingY) {
@@ -57,10 +170,11 @@ var Enemy = function(startingY) {
     this.y = startingY;
     this.height=60;
     this.width=50;
+    this.canMove = false;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-};
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -68,7 +182,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    if (gameStarted)
+    if (this.canMove)
     {
         if (this.x<500) {
             this.x=this.x+(200*dt);
@@ -85,15 +199,15 @@ Enemy.prototype.update = function(dt) {
             (this.y + this.height > player.y) 
            )
         {
-            handleHit();
+            gameController.playerHit();
         }
     }
 };
 
-function handleHit() {
-    player.isHit();
-    allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
-}
+// function handleHit() {
+//     player.isHit();
+//     allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
+// }
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -104,9 +218,9 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
-function updateScore() {
-    document.querySelector('.current-score').textContent = player.score;
-}
+// function updateScore() {
+//     document.querySelector('.current-score').textContent = player.score;
+// }
 
 const Player = function() {
     // this.moveStateType = {
@@ -131,26 +245,26 @@ const Player = function() {
     this.height = 80;
 }
 
-Player.prototype.isHit = function () {
-    this.injured = true;
-    this.lives-=1;
-    document.querySelector('.life-count').textContent = player.lives;
-    if (this.lives === 0) gameOver();
-    player.reset();
-}
+// Player.prototype.isHit = function () {
+//     this.injured = true;
+//     this.lives-=1;
+//     document.querySelector('.life-count').textContent = player.lives;
+//     if (this.lives === 0) gameOver();
+//     player.reset();
+// }
 
-function gameOver() {
-    gameStarted = false;
-    clearEnemies();
-    document.getElementById('game-screen').classList.add('hide');
-    document.querySelector('#game-over .score-info').textContent = player.score;
-    document.getElementById('game-over').classList.remove('hide');
+// function gameOver() {
+//     gameStarted = false;
+//     clearEnemies();
+//     document.getElementById('game-screen').classList.add('hide');
+//     document.querySelector('#game-over .score-info').textContent = player.score;
+//     document.getElementById('game-over').classList.remove('hide');
     
-}
+// }
 
-function clearEnemies() {
-    allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
-}
+// function clearEnemies() {
+//     allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
+// }
 
 
 Player.prototype.handleInput = function(keyCode) {
@@ -201,15 +315,15 @@ Player.prototype.render = function() {
 
 
 
-function startingYPos() {
-    return (Math.floor(Math.random()*4))*82+66;
-}
+// function startingYPos() {
+//     return (Math.floor(Math.random()*4))*82+66;
+// }
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-const player = new Player();
-let allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
+// const player = new Player();
+// let allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
 
 
 // This listens for key presses and sends the keys to your

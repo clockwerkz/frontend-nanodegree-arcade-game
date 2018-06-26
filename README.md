@@ -21,11 +21,14 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [ ] Gem Collision/Scoring
 - [x] Game Over Modal
 - [ ] Gameplay: Levels? Refine Game mechanics (Break this category up)
+- [ ] Change Lives remaining to be hearts displayed
+- [ ] Style the scoreboard
 
 - [ ] Refactor JavaScript code:
-    - [ ] Use modular pattern: Create Game Object that will keep track of player lives and scoring rather than having that tracked on the   player object
+    - [ ] Use MVC pattern: Create Game Object that will keep track of player lives and scoring rather than having that tracked on the   player object
     - [ ] Convert player Oject to Player Class
     - [ ] Convert Enemy Object to Enemy Class 
+    - [ ] Create Game Controller - tracks level, lives remaining, and score. Spawns enemies, gems, etc. 
 
 ### Game Design Doc
 
@@ -38,7 +41,11 @@ Gems provide bonus points, but there could also be power ups and extra life spaw
 
 - [ ] LocalStorage High Score tracker
 - [ ] High Score API to record and maintain a permanent list of high scores
-- [ ] Sound Effects?
+- [ ] Sound Effects
+- [ ] Injured State - instead of character respawn as a penalty, character blinks and is invulnerable for a short time
+- [ ] Power ups - faster speed, shield, etc
+- [ ] Extra lives
+- [ ] Re-do of the assets
 
 
 ### Resources
