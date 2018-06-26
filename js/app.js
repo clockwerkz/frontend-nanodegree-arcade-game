@@ -86,21 +86,58 @@ const screenView = (function() {
 
 })();
 
+const Player = function() {
+    // this.moveStateType = {
+    //     STANDING : 0,
+    //     MOVING_LEFT : 1,
+    //     MOVING_RIGHT : 2,
+    //     MOVING_UP : 3,
+    //     MOVING_DOWN  : 4
+    // };
+    //this.moveState = moveStateType.STANDING;
+    this.isMoving = false;
+    this.sprite = 'images/char-boy.png';
+    //this.spriteInjured = 'images/char-boy_injured.png';
+    this.x = 200;
+    this.y = 380;
+    this.yTarget=380;
+    this.xTarget=200;
+    // this.injured = false;
+    // this.lives = 3;
+    // this.score = 0;
+    this.width = 80;
+    this.height = 80;
+}
+
+// Enemies our player must avoid
+var Enemy = function(startingY) {
+    // Variables applied to each of our instances go here,
+    // we've provided one for you to get started
+    this.x = -100;
+    this.y = startingY;
+    this.height=60;
+    this.width=50;
+    this.canMove = false;
+    // The image/sprite for our enemies, this uses
+    // a helper we've provided to easily load images
+    this.sprite = 'images/enemy-bug.png';
+}
+
 const gameController = (function() {
     let lives = 3;
     let score = 0;
     gameStarted = false;
     numberOfEnemies = 2;
-    const player;
-    const allEnemies = []; [new Enemy(startingPos()), new Enemy(startingPos()) ];
+    let player;
+    const allEnemies = [];
 
-    const init = () => {
+    function init (){
         player = new Player();
         createEnemies();
     }
 
     /* Player is Hit by Enemy */
-    const playerHit = () => {
+    function playerHit() {
         lives-=1;
         screenView.updateLifeCounter(lives);
         if (this.lives === 0) {
@@ -116,7 +153,7 @@ const gameController = (function() {
     //     allEnemies = [new Enemy(startingYPos()), new Enemy(startingYPos()) ];
     // }
 
-    const gameOver = () => {
+    function gameOver() {
         gameStarted = false;
         clearEnemies();
         screenView.updateScores(score);
@@ -124,7 +161,7 @@ const gameController = (function() {
         
     }
     
-    const gameRestart = () => {
+    function gameRestart() {
         lives = 3;
         score = 0;
         screenView.updateScores(score);
@@ -134,47 +171,45 @@ const gameController = (function() {
         startEnemyMovement();
     }
 
-    const hasGameStarted = ()=> {
+    function hasGameStarted() {
         return gameStarted;
     }
 
     /* Helper Functions */
-    const startingPos =  () => {
+    function startingPos() {
         return (Math.floor(Math.random()*4))*83+66;
     }
 
-    const startEnemyMovement = () => {
+    function startEnemyMovement () {
         allEnemies.forEach( enemy => enemy.isMoving = true );
     }
 
-    const stopAllEnemyMovement = () => {
+     function stopAllEnemyMovement() {
         allEnemies.forEach( enemy => enemy.isMoving = false );
     }
 
-    const createEnemies = () => {
-        for (let i=0; i<numberOfEnemies; i++) allEnemies(push(new Enemy(startingPos())));
+    function createEnemies() {
+        for (let i=0; i<numberOfEnemies; i++) allEnemies.push(new Enemy(startingPos()));
+        console.log(allEnemies);
     }
 
     return {
         playerHit,
         hasGameStarted,
-        gameRestart
+        gameRestart,
+        init,
+        allEnemies,
+        player
     }
-})().init();
+})();
 
-// Enemies our player must avoid
-var Enemy = function(startingY) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-    this.x = -100;
-    this.y = startingY;
-    this.height=60;
-    this.width=50;
-    this.canMove = false;
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-}
+gameController.init();
+
+
+const allEnemies = gameController.allEnemies; 
+const player = gameController.player;
+
+
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -222,28 +257,28 @@ Enemy.prototype.render = function() {
 //     document.querySelector('.current-score').textContent = player.score;
 // }
 
-const Player = function() {
-    // this.moveStateType = {
-    //     STANDING : 0,
-    //     MOVING_LEFT : 1,
-    //     MOVING_RIGHT : 2,
-    //     MOVING_UP : 3,
-    //     MOVING_DOWN  : 4
-    // };
-    //this.moveState = moveStateType.STANDING;
-    this.isMoving = false;
-    this.sprite = 'images/char-boy.png';
-    //this.spriteInjured = 'images/char-boy_injured.png';
-    this.x = 200;
-    this.y = 380;
-    this.yTarget=380;
-    this.xTarget=200;
-    this.injured = false;
-    this.lives = 3;
-    this.score = 0;
-    this.width = 80;
-    this.height = 80;
-}
+// const Player = function() {
+//     // this.moveStateType = {
+//     //     STANDING : 0,
+//     //     MOVING_LEFT : 1,
+//     //     MOVING_RIGHT : 2,
+//     //     MOVING_UP : 3,
+//     //     MOVING_DOWN  : 4
+//     // };
+//     //this.moveState = moveStateType.STANDING;
+//     this.isMoving = false;
+//     this.sprite = 'images/char-boy.png';
+//     //this.spriteInjured = 'images/char-boy_injured.png';
+//     this.x = 200;
+//     this.y = 380;
+//     this.yTarget=380;
+//     this.xTarget=200;
+//     // this.injured = false;
+//     // this.lives = 3;
+//     // this.score = 0;
+//     this.width = 80;
+//     this.height = 80;
+// }
 
 // Player.prototype.isHit = function () {
 //     this.injured = true;
