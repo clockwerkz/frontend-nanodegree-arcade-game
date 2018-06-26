@@ -8,7 +8,8 @@ Play it here: [Bugs -N- Gems](https://clockwerkz.github.io/frontend-nanodegree-a
 This is my repository for Udacity's GitHub Project #3, the classic arcade game clone. The project involves using a provided basic game engine (utilizes HTML Canvas) to create game assets, and provide the logic and control for these assets.
 
 ### TODO
-- [ ] Refine collision system : [2D Collision Detection](https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection)
+- [X] Refine collision system : [2D Collision Detection](https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection)
+- [ ] Refine player alignment on the board
 - [x] Selection Screen before game begins
 - [x] Character Interpolates to new position, doesn't just pop to it.
 - [x] Game Display (HUD) over the game board
@@ -23,7 +24,8 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 
 - [ ] Refactor JavaScript code:
     - [ ] Use modular pattern: Create Game Object that will keep track of player lives and scoring rather than having that tracked on the   player object
-
+    - [ ] Convert player Oject to Player Class
+    - [ ] Convert Enemy Object to Enemy Class 
 
 ### Game Design Doc
 

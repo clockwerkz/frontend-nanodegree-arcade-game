@@ -55,7 +55,7 @@ var Enemy = function(startingY) {
     // we've provided one for you to get started
     this.x = -100;
     this.y = startingY;
-    this.height=35;
+    this.height=60;
     this.width=50;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -76,8 +76,14 @@ Enemy.prototype.update = function(dt) {
             this.y=startingYPos();
             this.x=-100;
         }
-        if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
-        &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) 
+        // if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
+        // &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) 
+        if ( 
+            (this.x < player.x + player.width ) &&
+            (this.x + this.width > player.x) &&   
+            (this.y < player.y + player.height ) &&
+            (this.y + this.height > player.y) 
+           )
         {
             handleHit();
         }
@@ -121,6 +127,8 @@ const Player = function() {
     this.injured = false;
     this.lives = 3;
     this.score = 0;
+    this.width = 80;
+    this.height = 80;
 }
 
 Player.prototype.isHit = function () {
