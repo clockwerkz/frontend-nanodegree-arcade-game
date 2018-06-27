@@ -17,8 +17,8 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [x] Display Lives Left on the HUD
 - [x] Scoring System
 - [x] Display Scoring System
-- [ ] Gem Spawning
-- [ ] Gem Collision/Scoring
+- [X] Gem Spawning
+- [X] Gem Collision/Scoring
 - [x] Game Over Modal
 - [ ] Gameplay: Levels? Refine Game mechanics (Break this category up)
 - [ ] Change Lives remaining to be hearts displayed

@@ -115,7 +115,7 @@ class Gem{
         this.width=50;   
     }
 
-    update() {
+    update(dt) {
         if ( 
                 (this.x < player.x + player.width ) &&
                 (this.x + this.width > player.x) &&   
@@ -123,7 +123,7 @@ class Gem{
                 (this.y + this.height > player.y) 
             )
             {
-                gameController.gemCollected();
+                gameController.gemCollected(this);
             }
     } 
 
@@ -175,6 +175,7 @@ const player = new Player();
 const allGems = [];
 
 
+
 //Game Controller Object
 const gameController = (function(player, allEnemies) {
     let lives = 3;
@@ -185,6 +186,9 @@ const gameController = (function(player, allEnemies) {
     let clock = 0;
     let clockRunning=null;
     let isClockRunning = false;
+    const gemColors = ['images/Gem Orange.png','images/Gem Green.png','images/Gem Blue.png'];
+    maxGemCount = 2;
+    gemTiming = 5;
 
     function init (){
         createEnemies();
@@ -203,14 +207,25 @@ const gameController = (function(player, allEnemies) {
         }
     }
 
+    function createGem() {
+        let randomColor = Math.floor(Math.random()*3);
+        console.log(randomColor);
+        return new Gem(gemColors[randomColor],newLanePosX(),newLanePos() );
+    }
+
     function gemSpawn() {
-        if (clock===5) {
-            allGems.push(new Gem('images/Gem Green.png'), 200, 300);
+        if (clock%gemTiming===0 && allGems.length<maxGemCount) {
+            createGem();
+            allGems.push(createGem());
         }
     }
 
-    function gemCollected() {
-        console.log("Gem Scored!");
+    function gemCollected(gem) {
+        let index = allGems.indexOf(gem);
+        allGems.splice(index, 1);
+        score+=500;
+        screenView.updateScores(score);
+
     }
 
     function laneClearedScore() {
@@ -249,6 +264,10 @@ const gameController = (function(player, allEnemies) {
 
     function hasGameStarted() {
         return gameStarted;
+    }
+
+    function newLanePosX() {
+        return (Math.floor(Math.random()*5))*100;
     }
 
     function newLanePos() {
