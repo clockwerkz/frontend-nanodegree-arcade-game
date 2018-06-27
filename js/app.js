@@ -1,31 +1,4 @@
-// Game Start Modal
-const characterSelection = document.querySelector(".character-selection");
-const btnStart = document.querySelector('.btn-start');
-// let gameStarted = false;
-
-
-characterSelection.addEventListener("click", (e)=> {
-    if (e.target.nodeName==='IMG') {
-        const currentSelection = characterSelection.querySelector(".selected");
-        if (e.target !== currentSelection) {
-            currentSelection.classList.remove("selected");
-            e.target.classList.add('selected');
-        }
-    }
-});
-
-const btnEnd = document.querySelector('#game-over .btn');
-btnEnd.addEventListener('click', ()=> {
-    gameController.gameRestart();
-});
-
-
-btnStart.addEventListener('click', ()=> {
-    gameController.gameStart(document.querySelector('.selected').dataset.value);
-});
-
-
-
+// View Object
 const screenView = (function() {
     /* Main Screen Display */
     const gameStart = document.getElementById('gameStart'); /* TODO: change this to game-start for naming consistency */
@@ -70,139 +43,148 @@ const screenView = (function() {
 
 })();
 
-const Player = function() {
-    // this.moveStateType = {
-    //     STANDING : 0,
-    //     MOVING_LEFT : 1,
-    //     MOVING_RIGHT : 2,
-    //     MOVING_UP : 3,
-    //     MOVING_DOWN  : 4
-    // };
-    //this.moveState = moveStateType.STANDING;
-    this.isMoving = false;
-    this.sprite = 'images/char-boy.png';
-    //this.spriteInjured = 'images/char-boy_injured.png';
-    this.x = 200;
-    this.y = 380;
-    this.yTarget=380;
-    this.xTarget=200;
-    // this.injured = false;
-    // this.lives = 3;
-    // this.score = 0;
-    this.width = 80;
-    this.height = 80;
-}
 
-
-Player.prototype.handleInput = function(keyCode) {
-
-    if (!this.isMoving) {
-        this.isMoving = true;
-        switch (keyCode) {
-            case('left'):
-            if (this.xTarget > 0) this.xTarget-=100;
-                break;
-            case('up'):
-                if (this.yTarget > 0) {
-                    this.yTarget-=80;
-                } else {
-                    gameController.laneClearedScore();
-                }
-                break;
-            case('right'):
-                if (this.xTarget < 400) this.xTarget+=100;
-                break;
-            case('down'):
-                if (this.yTarget < 400) this.yTarget+=80;
-            }       
+//Player Class
+class Player {
+    constructor() {
+        this.isMoving = false;
+        this.sprite = 'images/char-boy.png';
+        this.x = 200;
+        this.y = 380;
+        this.yTarget=380;
+        this.xTarget=200;
+        // this.injured = false;
+        // this.lives = 3;
+        // this.score = 0;
+        this.width = 80;
+        this.height = 80; 
     }
-}
 
-Player.prototype.reset = function() {
-    this.x = 200;
-    this.y = 380;
-    this.yTarget=380;
-    this.xTarget=200;
-}
+    update() {
+        if (this.y > this.yTarget) this.y= this.y-5;
+        if (this.y < this.yTarget) this.y= this.y+5;
+        if (this.x > this.xTarget) this.x= this.x-5;
+        if (this.x < this.xTarget) this.x= this.x+5;
+        if (this.x === this.xTarget && this.y === this.yTarget) this.isMoving = false;
+        
+    }
 
-Player.prototype.update = function() {
-    if (this.y > this.yTarget) this.y= this.y-5;
-    if (this.y < this.yTarget) this.y= this.y+5;
-    if (this.x > this.xTarget) this.x= this.x-5;
-    if (this.x < this.xTarget) this.x= this.x+5;
-    if (this.x === this.xTarget && this.y === this.yTarget) this.isMoving = false;
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    reset() {
+        this.x = 200;
+        this.y = 380;
+        this.yTarget=380;
+        this.xTarget=200;
+    }
+
+    handleInput(keyCode) {
+
+        if (!this.isMoving) {
+            this.isMoving = true;
+            switch (keyCode) {
+                case('left'):
+                if (this.xTarget > 0) this.xTarget-=100;
+                    break;
+                case('up'):
+                    if (this.yTarget > 0) {
+                        this.yTarget-=80;
+                    } else {
+                        gameController.laneClearedScore();
+                    }
+                    break;
+                case('right'):
+                    if (this.xTarget < 400) this.xTarget+=100;
+                    break;
+                case('down'):
+                    if (this.yTarget < 400) this.yTarget+=80;
+                }       
+        }
+    }
     
 }
 
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+class Gem{
+    constructor(gem_type, x, y) {
+        this.sprite = gem_type;
+        this.x = x;
+        this.y = y;
+        this.height=60;
+        this.width=50;   
+    }
 
-// Enemies our player must avoid
+    update() {
+        if ( 
+                (this.x < player.x + player.width ) &&
+                (this.x + this.width > player.x) &&   
+                (this.y < player.y + player.height ) &&
+                (this.y + this.height > player.y) 
+            )
+            {
+                gameController.gemCollected();
+            }
+    } 
 
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+}
+
+//Enemies our player must avoid
 class Enemy {
     constructor(startingY) {
-        
+        this.x = -100;
+        this.y = startingY;
+        this.height=60;
+        this.width=50;
+        this.canMove = false;
+        this.startingY = startingY;
+        this.sprite = 'images/enemy-bug.png';
     }
-}
-var Enemy = function(startingY) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-    this.x = -100;
-    this.y = startingY;
-    this.height=60;
-    this.width=50;
-    this.canMove = false;
-    this.startingY = startingY;
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-}
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    if (this.canMove)
-    {
-        if (this.x<500) {
-            this.x=this.x+(200*dt);
-        } else {
-            this.y=gameController.newLanePos();
-            this.x=-100;
-        }
-        // if (((this.y+this.height)>player.y) && ((this.y-this.height)<player.y) 
-        // &&((this.x+this.width)>player.x) && ((this.x-this.width)<player.x) ) 
-        if ( 
-            (this.x < player.x + player.width ) &&
-            (this.x + this.width > player.x) &&   
-            (this.y < player.y + player.height ) &&
-            (this.y + this.height > player.y) 
-           )
+    update(dt) {
+        if (this.canMove)
         {
-            gameController.playerHit();
+            if (this.x<500) {
+                this.x=this.x+(200*dt);
+            } else {
+                this.y=gameController.newLanePos();
+                this.x=-100;
+            } 
+            if ( 
+                (this.x < player.x + player.width ) &&
+                (this.x + this.width > player.x) &&   
+                (this.y < player.y + player.height ) &&
+                (this.y + this.height > player.y) 
+               )
+            {
+                gameController.playerHit();
+            }
         }
+    }   
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
-};
-
-
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
+}
 
 const allEnemies = []; 
 const player = new Player();
+const allGems = [];
 
+
+//Game Controller Object
 const gameController = (function(player, allEnemies) {
     let lives = 3;
     let score = 0;
     gameStarted = false;
     numberOfEnemies = 2;
     laneScore = 100;
+    let clock = 0;
+    let clockRunning=null;
+    let isClockRunning = false;
 
     function init (){
         createEnemies();
@@ -221,6 +203,16 @@ const gameController = (function(player, allEnemies) {
         }
     }
 
+    function gemSpawn() {
+        if (clock===5) {
+            allGems.push(new Gem('images/Gem Green.png'), 200, 300);
+        }
+    }
+
+    function gemCollected() {
+        console.log("Gem Scored!");
+    }
+
     function laneClearedScore() {
         score+=laneScore;
         screenView.updateScores(score);
@@ -228,6 +220,7 @@ const gameController = (function(player, allEnemies) {
     }
 
     function gameOver() {
+        stopClock();
         gameStarted = false;
         screenView.updateScores(score);
         screenView.showGameOver();
@@ -235,14 +228,15 @@ const gameController = (function(player, allEnemies) {
     }
 
     function gameStart(characterChoice) {
-        player.sprite = characterChoice;
-        console.log
+        startClock();
+        player.sprite = characterChoice; 
         screenView.showGameBoard();
         gameStarted = true;
         startEnemyMovement();
     }
     
     function gameRestart() {
+        startClock();
         lives = 3;
         score = 0;
         screenView.updateScores(score);
@@ -272,8 +266,29 @@ const gameController = (function(player, allEnemies) {
     function createEnemies() {
         while(allEnemies.length) allEnemies.pop();
         for (let i=0; i<numberOfEnemies; i++) allEnemies.push(new Enemy(newLanePos()));
-        console.log(allEnemies);
     }
+    // Internal Timer functions
+    function startClock() {
+        if (!isClockRunning) {
+            resetClock();
+            isClockRunning = true;
+            clockRunning = setInterval(()=>{
+                clock++;
+                gemSpawn();
+            }, 1000);
+        }
+    }
+
+    function stopClock() {
+        if (clockRunning) clearInterval(clockRunning);
+        isClockRunning = false;
+        clockRunning = null;
+    }
+
+    function resetClock() {
+        clock = 0;
+    }
+
 
     return {
         gameStart,
@@ -283,11 +298,34 @@ const gameController = (function(player, allEnemies) {
         laneClearedScore,
         newLanePos,
         init,
+        gemCollected
     }
 })(player, allEnemies);
 
 gameController.init();
 
+
+
+
+//Button and keyboard event Handlers
+document.querySelector(".character-selection").addEventListener("click", (e)=> {
+    if (e.target.nodeName==='IMG') {
+        const currentSelection = document.querySelector(".selected");
+        if (e.target !== currentSelection) {
+            currentSelection.classList.remove("selected");
+            e.target.classList.add('selected');
+        }
+    }
+});
+
+document.querySelector('#game-over .btn').addEventListener('click', ()=> {
+    gameController.gameRestart();
+});
+
+
+document.querySelector('.btn-start').addEventListener('click', ()=> {
+    gameController.gameStart(document.querySelector('.selected').dataset.value);
+});
 
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
@@ -296,7 +334,6 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-    console.log(gameController.hasGameStarted());
 
     if (gameController.hasGameStarted()) player.handleInput(allowedKeys[e.keyCode]);
 });

@@ -90,10 +90,16 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
+        allGems.forEach(function(gem) {
+            console.log(gem);
+            gem.update();
+        });
+
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+
+        player.update(dt);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -178,6 +184,9 @@ var Engine = (function(global) {
         'images/char-horn-girl.png',
         'images/char-pink-girl.png',
         'images/char-princess-girl.png',
+        'images/Gem blue.png',
+        'images/Gem green.png',
+        'images/Gem orange.png',
     ]);
     Resources.onReady(init);
 

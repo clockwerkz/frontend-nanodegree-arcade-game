@@ -24,10 +24,10 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [ ] Change Lives remaining to be hearts displayed
 - [ ] Style the scoreboard
 
-- [ ] Refactor JavaScript code:
+- [X] Refactor JavaScript code:
     - [X] Use MVC pattern: Create Game Object that will keep track of player lives and scoring rather than having that tracked on the   player object
-    - [ ] Convert player Oject to Player Class
-    - [ ] Convert Enemy Object to Enemy Class 
+    - [X] Convert player Oject to Player Class
+    - [X] Convert Enemy Object to Enemy Class 
     - [X] Create Game Controller - tracks level, lives remaining, and score. Spawns enemies, gems, etc. 
     - [X] Create a screenView - handles updating the screens
 
