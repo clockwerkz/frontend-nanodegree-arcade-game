@@ -1,3 +1,16 @@
+/*******************************************************************************
+ *   
+ * UDACITY FRONT END DEVELOPER NANODEGREE PROGRAM
+ * PROJECT #3: CLASSIC ARCADE GAME CLONE
+ * 
+ * 
+ * By: Carlos Fins
+ * Submission Date: 06/28/18
+ * Repo: https://github.com/clockwerkz/frontend-nanodegree-arcade-game
+ * 
+ * 
+********************************************************************************/
+
 // View Object
 const screenView = (function() {
     /* Main Screen Display */
