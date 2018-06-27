@@ -139,6 +139,12 @@ Player.prototype.render = function() {
 };
 
 // Enemies our player must avoid
+
+class Enemy {
+    constructor(startingY) {
+        
+    }
+}
 var Enemy = function(startingY) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
