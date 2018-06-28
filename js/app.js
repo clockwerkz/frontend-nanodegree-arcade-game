@@ -183,28 +183,9 @@ class Enemy {
     }
 }
 
-class Rock {
-    constructor(x) {
-        this.x = x;
-        this.y = -20;
-        this.sprite = 'images/Rock.png';
-        this.height = 100;
-        this.width = 100;
-    }
-
-    update() {
-
-    }
-
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
-}
-
 const allEnemies = []; 
 const player = new Player();
 const allGems = [];
-const allRocks = [];
 
 
 
