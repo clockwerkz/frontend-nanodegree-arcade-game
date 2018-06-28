@@ -190,7 +190,7 @@ const allGems = [];
 
 
 //Game Controller Object
-const gameController = (function(player, allEnemies) {
+const gameController = (function(player, allEnemies, allGems) {
     let lives = 3;
     let score = 0;
     gameStarted = false;
@@ -250,6 +250,8 @@ const gameController = (function(player, allEnemies) {
     function gameOver() {
         stopClock();
         gameStarted = false;
+        deleteEnemies();
+        deleteGems();
         screenView.updateScores(score);
         screenView.showGameOver();
         
@@ -291,12 +293,20 @@ const gameController = (function(player, allEnemies) {
         allEnemies.forEach( enemy => enemy.canMove = true );
     }
 
-     function stopAllEnemyMovement() {
-        allEnemies.forEach( enemy => enemy.canMove = false );
+      function stopAllEnemyMovement() {
+         allEnemies.forEach( enemy => enemy.canMove = false );
+     }
+
+    function deleteEnemies() {
+        while(allEnemies.length) allEnemies.pop();
+    }
+
+    function deleteGems() {
+        while(allGems.length) allGems.pop();
     }
 
     function createEnemies() {
-        while(allEnemies.length) allEnemies.pop();
+        deleteEnemies();
         for (let i=0; i<numberOfEnemies; i++) allEnemies.push(new Enemy(newLanePos()));
     }
     // Internal Timer functions
@@ -332,7 +342,7 @@ const gameController = (function(player, allEnemies) {
         init,
         gemCollected
     }
-})(player, allEnemies);
+})(player, allEnemies, allGems);
 
 gameController.init();
 
