@@ -222,7 +222,6 @@ const gameController = (function(player, allEnemies, allGems) {
 
     function createGem() {
         let randomColor = Math.floor(Math.random()*3);
-        console.log(randomColor);
         return new Gem(gemColors[randomColor],newLanePosX(),newLanePos() );
     }
 
@@ -250,6 +249,7 @@ const gameController = (function(player, allEnemies, allGems) {
     function gameOver() {
         stopClock();
         gameStarted = false;
+        player.reset();
         deleteEnemies();
         deleteGems();
         screenView.updateScores(score);
@@ -369,6 +369,10 @@ document.querySelector('.btn-start').addEventListener('click', ()=> {
     gameController.gameStart(document.querySelector('.selected').dataset.value);
 });
 
+document.addEventListener('keydown', function(e) {
+    e.preventDefault();
+})
+
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -376,6 +380,6 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-
     if (gameController.hasGameStarted()) player.handleInput(allowedKeys[e.keyCode]);
+
 });

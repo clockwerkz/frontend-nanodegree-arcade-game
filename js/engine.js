@@ -89,13 +89,16 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allGems.forEach(function(gem) {
-             gem.update();
-         });
-
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
+        if (allGems) {
+            allGems.forEach(function(gem) {
+                gem.update();
+            });
+        }
+        if (allEnemies){
+            allEnemies.forEach(function(enemy) {
+                enemy.update(dt);
+            });
+        }
 
         player.update(dt);
     }
@@ -153,13 +156,16 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allGems.forEach(function(gem) {
-            gem.render();
-        });
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
-
+        if (allGems) {
+            allGems.forEach(function(gem) {
+                gem.render();
+            });
+        }
+        if (allEnemies){
+            allEnemies.forEach(function(enemy) {
+                enemy.render();
+            });
+        }
         player.render();
     }
 
