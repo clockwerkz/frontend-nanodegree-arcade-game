@@ -94,12 +94,11 @@ class Player {
     }
 
     handleInput(keyCode) {
-
         if (!this.isMoving) {
             this.isMoving = true;
             switch (keyCode) {
                 case('left'):
-                if (this.xTarget > 0) this.xTarget-=100;
+                    if (this.xTarget > 0) this.xTarget-=100;
                     break;
                 case('up'):
                     if (this.yTarget > 0) {
@@ -116,6 +115,7 @@ class Player {
                 }       
         }
     }
+
     
 }
 
@@ -183,9 +183,28 @@ class Enemy {
     }
 }
 
+class Rock {
+    constructor(x) {
+        this.x = x;
+        this.y = -20;
+        this.sprite = 'images/Rock.png';
+        this.height = 100;
+        this.width = 100;
+    }
+
+    update() {
+
+    }
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+}
+
 const allEnemies = []; 
 const player = new Player();
 const allGems = [];
+const allRocks = [];
 
 
 
@@ -194,7 +213,7 @@ const gameController = (function(player, allEnemies, allGems) {
     let lives = 3;
     let score = 0;
     gameStarted = false;
-    numberOfEnemies = 2;
+    numberOfEnemies = 4;
     laneScore = 100;
     let clock = 0;
     let clockRunning=null;
@@ -221,7 +240,7 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function createGem() {
-        let randomColor = Math.floor(Math.random()*3);
+        let randomColor = Math.floor(Math.random()*gemColors.length);
         return new Gem(gemColors[randomColor],newLanePosX(),newLanePos() );
     }
 
@@ -286,7 +305,7 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function newLanePos() {
-        return (Math.floor(Math.random()*4))*83+66;
+        return (Math.floor(Math.random()*5))*83-20;
     }
 
     function startEnemyMovement () {
@@ -370,7 +389,7 @@ document.querySelector('.btn-start').addEventListener('click', ()=> {
 });
 
 document.addEventListener('keydown', function(e) {
-    e.preventDefault();
+    if (e.keyCode >=37 && e.keyCode <= 40) e.preventDefault();
 })
 
 document.addEventListener('keyup', function(e) {
