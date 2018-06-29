@@ -268,8 +268,6 @@ const gameController = (function(player, allEnemies, allGems) {
             gameOver();
         } else {
             player.reset();
-            createEnemies();
-            startEnemyMovement();
         }
     }
 
