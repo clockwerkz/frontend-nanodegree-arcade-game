@@ -10,7 +10,7 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 ### TODO
 - [ ] Add comments to app.js
 - [X] Refine collision system : [2D Collision Detection](https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection)
-- [ ] Refine player alignment on the board
+- [X] Refine player alignment on the board
 - [x] Selection Screen before game begins
 - [x] Character Interpolates to new position, doesn't just pop to it.
 - [x] Game Display (HUD) over the game board
@@ -22,13 +22,14 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [X] Gem Collision/Scoring
 - [x] Game Over Modal
 - [x] Add Rocks/Obstacles
-- [ ] Gameplay: Levels? Refine Game mechanics (Break this category up)
-- [ ] Add Game Countdown Clock
+- ~~[ ] Gameplay: Levels? Refine Game mechanics (Break this category up)~~
+- [X] Add Game Countdown Clock
 - [ ] Add level start/end mechanic
-- [ ] If Time runs out, game is over
+- [X] If Time runs out, game is over
 - [ ] Change Lives remaining to be hearts displayed
 - [ ] Style the scoreboard
 - [ ] Paint arrow indicators on the last row of stone blocks
+- [X] Spawn Enemies in Intervals
 
 - [X] Refactor JavaScript code:
     - [X] Use MVC pattern: Create Game Object that will keep track of player lives and scoring rather than having that tracked on the   player object

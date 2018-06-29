@@ -18,9 +18,10 @@ const screenView = (function() {
     const gameScreen = document.getElementById('game-screen');
     const gameOver = document.getElementById('game-over');
 
-    /* Score and lives */
+    /* Score, Countdown Timer, and lives */
     const scoreInfo = document.querySelectorAll('.score-info');
     const livesCount = document.querySelector('.life-count');
+    const levelTimer = document.querySelector('.level-timer')
 
     function showGameBoard () {
         gameStart.classList.toggle('hide');
@@ -29,6 +30,10 @@ const screenView = (function() {
 
     const updateLifeCounter = (lives)=> {
         livesCount.textContent = lives;
+    }
+
+    const updateLevelTimer = (time) => {
+        levelTimer.textContent = time;
     }
 
     const updateScores = (score) => {
@@ -51,7 +56,8 @@ const screenView = (function() {
         updateScores,
         showGameBoard,
         showGameOver,
-        redisplayGame
+        redisplayGame,
+        updateLevelTimer
     };
 
 })();
@@ -245,9 +251,12 @@ const gameController = (function(player, allEnemies, allGems) {
     maxGemCount = 2;
     gemTiming = 5;
     let enemySpawnTimer;
-    let spawnSpeed = 750;
+    let spawnSpeed = 1000;
+    let totalTimeToComplete = 30;
+    let levelTimer = totalTimeToComplete;
 
     function init (){
+        screenView.updateLevelTimer(levelTimer);
         //createEnemies();
     }
 
@@ -286,8 +295,12 @@ const gameController = (function(player, allEnemies, allGems) {
 
     function laneClearedScore() {
         score+=laneScore;
+        stopClock();
         screenView.updateScores(score);
+        resetLevelTimer();
+        deleteGems();
         player.reset();
+        startClock(levelTimer);
     }
 
     function gameOver() {
@@ -302,8 +315,14 @@ const gameController = (function(player, allEnemies, allGems) {
         
     }
 
+    function resetLevelTimer() {
+        levelTimer = totalTimeToComplete;
+        screenView.updateLevelTimer(levelTimer);
+    }
+
     function gameStart(characterChoice) {
-        startClock();
+        resetLevelTimer();
+        startClock(levelTimer);
         player.sprite = characterChoice; 
         screenView.showGameBoard();
         gameStarted = true;
@@ -311,7 +330,8 @@ const gameController = (function(player, allEnemies, allGems) {
     }
     
     function gameRestart() {
-        startClock();
+        resetLevelTimer();
+        startClock(levelTimer);
         lives = 3;
         score = 0;
         screenView.updateScores(score);
@@ -362,16 +382,19 @@ const gameController = (function(player, allEnemies, allGems) {
         }, spawnSpeed);
     }
     // Internal Timer functions
-    function startClock() {
+    function startClock(levelTimer) {
         if (!isClockRunning) {
             resetClock();
             isClockRunning = true;
             clockRunning = setInterval(()=>{
-                clock++;
-                gemSpawn();
+                levelTimer--;
+                screenView.updateLevelTimer(levelTimer);
+                if (levelTimer%4===0) gemSpawn();
+                if (levelTimer <= 0) gameOver();
             }, 1000);
         }
     }
+
 
     function stopClock() {
         if (clockRunning) clearInterval(clockRunning);
