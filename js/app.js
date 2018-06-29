@@ -327,7 +327,7 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function newLanePos() {
-        return (Math.floor(Math.random()*5))*83-20;
+        return (Math.floor(Math.random()*4))*83+60;
     }
 
     function startEnemyMovement () {
