@@ -347,8 +347,8 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function createEnemies() {
-        //deleteEnemies();
-        //for (let i=0; i<numberOfEnemies; i++) allEnemies.push(new Enemy(newLanePos()));
+        deleteEnemies();
+        for (let i=0; i<numberOfEnemies; i++) allEnemies.push(new Enemy(newLanePos()));
     }
     // Internal Timer functions
     function startClock() {
