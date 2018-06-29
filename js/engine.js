@@ -99,6 +99,11 @@ var Engine = (function(global) {
                 enemy.update(dt);
             });
         }
+        if (allRocks){
+            allRocks.forEach(function(rock) {
+                rock.update();
+            });
+        }
 
         player.update(dt);
     }
@@ -164,6 +169,11 @@ var Engine = (function(global) {
         if (allEnemies){
             allEnemies.forEach(function(enemy) {
                 enemy.render();
+            });
+        }
+        if (allRocks){
+            allRocks.forEach(function(rock) {
+                rock.render();
             });
         }
         
