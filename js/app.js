@@ -69,8 +69,8 @@ class Player {
         // this.injured = false;
         // this.lives = 3;
         // this.score = 0;
-        this.width = 80;
-        this.height = 80; 
+        this.width = 50;
+        this.height = 40; 
     }
 
     update() {
@@ -147,21 +147,22 @@ class Gem{
 
 //Enemies our player must avoid
 class Enemy {
-    constructor(startingY) {
+    constructor(startingY,speed, canMove) {
         this.x = -100;
         this.y = startingY;
         this.height=60;
         this.width=50;
-        this.canMove = false;
+        this.canMove = canMove || false;
         this.startingY = startingY;
         this.sprite = 'images/enemy-bug.png';
+        this.speed = speed || 200;
     }
 
     update(dt) {
         if (this.canMove)
         {
             if (this.x<500) {
-                this.x=this.x+(200*dt);
+                this.x=this.x+(this.speed*dt);
             } else {
                 this.y=gameController.newLanePos();
                 this.x=-100;
@@ -202,9 +203,11 @@ const gameController = (function(player, allEnemies, allGems) {
     const gemColors = ['images/Gem Orange.png','images/Gem Green.png','images/Gem Blue.png'];
     maxGemCount = 2;
     gemTiming = 5;
+    let enemySpawnTimer;
+    let spawnSpeed = 750;
 
     function init (){
-        createEnemies();
+        //createEnemies();
     }
 
     /* Player is Hit by Enemy */
@@ -250,6 +253,7 @@ const gameController = (function(player, allEnemies, allGems) {
         stopClock();
         gameStarted = false;
         player.reset();
+        if (enemySpawnTimer) clearInterval(enemySpawnTimer);
         deleteEnemies();
         deleteGems();
         screenView.updateScores(score);
@@ -262,7 +266,7 @@ const gameController = (function(player, allEnemies, allGems) {
         player.sprite = characterChoice; 
         screenView.showGameBoard();
         gameStarted = true;
-        startEnemyMovement();
+        createEnemies();
     }
     
     function gameRestart() {
@@ -306,8 +310,15 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function createEnemies() {
+        console.log("creating Enemies");
         deleteEnemies();
-        for (let i=0; i<numberOfEnemies; i++) allEnemies.push(new Enemy(newLanePos()));
+        let number = numberOfEnemies;
+        enemySpawnTimer = setInterval(function() {
+            console.log(number);
+            if (number <= 1) clearInterval(enemySpawnTimer);
+            allEnemies.push(new Enemy(newLanePos(),150, true));
+            number--;
+        }, spawnSpeed);
     }
     // Internal Timer functions
     function startClock() {
