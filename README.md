@@ -21,9 +21,14 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [X] Gem Spawning
 - [X] Gem Collision/Scoring
 - [x] Game Over Modal
+- [x] Add Rocks/Obstacles
 - [ ] Gameplay: Levels? Refine Game mechanics (Break this category up)
+- [ ] Add Game Countdown Clock
+- [ ] Add level start/end mechanic
+- [ ] If Time runs out, game is over
 - [ ] Change Lives remaining to be hearts displayed
 - [ ] Style the scoreboard
+- [ ] Paint arrow indicators on the last row of stone blocks
 
 - [X] Refactor JavaScript code:
     - [X] Use MVC pattern: Create Game Object that will keep track of player lives and scoring rather than having that tracked on the   player object
@@ -34,9 +39,7 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 
 ### Game Design Doc
 
-What happens when the player gets to the top of the screen? Game resets to a new level and enemies spawn with a slightly harder difficulty? Or does the game screen scroll up and reveal another section? <br>
-Potential use of keys in the game? What if the exit was a doorway that is initially closed when the level begins, and the player has to obtain the key in the level in order to unlock and open the exit? <br>
-Gems provide bonus points, but there could also be power ups and extra life spawning in the game.
+The game consists of a series levels. In each level, the players must grab as many gems they can while avoiding bugs and escape before the time runs out. Players start with 3 lives; they lose a life when they are hit by a bug. Game is over when the player fails to exit before the countdown expires, or they lose all their lives.
 
 
 ### WishList

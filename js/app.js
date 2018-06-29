@@ -98,22 +98,43 @@ class Player {
             this.isMoving = true;
             switch (keyCode) {
                 case('left'):
-                    if (this.xTarget > 0) this.xTarget-=100;
+                    if (!this.checkForRocks(-100,0)) {
+                        if (this.xTarget > 0) this.xTarget-=100;
+                    }
                     break;
                 case('up'):
-                    if (this.yTarget > 0) {
-                        this.yTarget-=80;
-                    } else {
-                        gameController.laneClearedScore();
+                    if (!this.checkForRocks(0,-80)) {
+                        if (this.yTarget > 0) {
+                            this.yTarget-=80;
+                        } else {
+                            gameController.laneClearedScore();
+                        }
                     }
                     break;
                 case('right'):
-                    if (this.xTarget < 400) this.xTarget+=100;
+                    if (!this.checkForRocks(100,0)) {
+                        if (this.xTarget < 400) this.xTarget+=100;
+                    }
                     break;
                 case('down'):
-                    if (this.yTarget < 400) this.yTarget+=80;
+                    if (!this.checkForRocks(0, 80)) {
+                        if (this.yTarget < 400) this.yTarget+=80;
+                    }
                 }       
         }
+    }
+
+    checkForRocks(x, y) {
+        let rockPresent = false;
+        allRocks.forEach(function(rock) {
+            if ( 
+                (rock.x < player.x + player.width + x) &&
+                (rock.x + rock.width > player.x + x) &&   
+                (rock.y < player.y + player.height + y) &&
+                (rock.y + rock.height  > player.y + y)
+            ) rockPresent = true;
+        });
+        return rockPresent;
     }
 
     
@@ -183,6 +204,26 @@ class Enemy {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 }
+
+class Rock {
+    constructor(x){
+        this.x =x;
+        this.y = -20;
+        this.sprite = 'images/Rock.png';
+        this.width = 100;
+        this.height = 43;
+    }
+
+    update() {
+
+    }
+    
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+}
+
+const allRocks = [new Rock(100), new Rock(400)];
 
 const allEnemies = []; 
 const player = new Player();
@@ -290,7 +331,7 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function newLanePos() {
-        return (Math.floor(Math.random()*5))*83-20;
+        return (Math.floor(Math.random()*4))*83+60;
     }
 
     function startEnemyMovement () {
