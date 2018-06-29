@@ -14,7 +14,7 @@
 // View Object
 const screenView = (function() {
     /* Main Screen Display */
-    const gameStart = document.getElementById('gameStart'); /* TODO: change this to game-start for naming consistency */
+    const gameStart = document.getElementById('game-start'); 
     const gameScreen = document.getElementById('game-screen');
     const gameOver = document.getElementById('game-over');
 
