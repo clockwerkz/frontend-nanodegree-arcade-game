@@ -37,7 +37,7 @@ body {
 
 .modal-body {
     box-sizing: border-box;
-    padding: 40px 0;
+    padding: 10px 0;
     position: relative;
     width: 60%;
     margin: 0 auto;
@@ -50,6 +50,7 @@ body {
 }
 .modal p {
     font-size: 1.2em;
+    line-height: 1.4em;
     margin-bottom: 20px;
 }
 
@@ -104,6 +105,28 @@ body {
 
 #game-level h2 {
     line-height: 110px;
+}
+
+#game-over ul.high-scores {
+    list-style: none;
+    width: 300px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#game-over ul.high-scores li {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#game-over ul.highscores li .name {
+    text-align: left;
+}
+
+#game-over ul.highscores li .score {
+    text-align: right;
 }
 
 

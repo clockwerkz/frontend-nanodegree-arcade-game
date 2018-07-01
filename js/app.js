@@ -265,7 +265,7 @@ const gameModel = [
         numberOfEnemies : 3,
         maxGemCount : 3,
         gemTiming : 4,
-        spawnSpeed : 1000,
+        spawnSpeed : 1500,
         totalTimeToComplete : 30,
         numberOfRocks : 0,
         enemySpeed : 75
@@ -274,7 +274,7 @@ const gameModel = [
         numberOfEnemies : 3,
         maxGemCount : 3,
         gemTiming : 4,
-        spawnSpeed : 1000,
+        spawnSpeed : 1500,
         totalTimeToComplete : 30,
         numberOfRocks : 0,
         enemySpeed : 75
@@ -283,7 +283,7 @@ const gameModel = [
         numberOfEnemies : 4,
         maxGemCount : 3,
         gemTiming : 4,
-        spawnSpeed : 1000,
+        spawnSpeed : 1400,
         totalTimeToComplete : 30,
         numberOfRocks : 1,
         enemySpeed : 150
@@ -292,7 +292,7 @@ const gameModel = [
         numberOfEnemies : 5,
         maxGemCount : 3,
         gemTiming : 4,
-        spawnSpeed : 800,
+        spawnSpeed :1400,
         totalTimeToComplete : 30,
         numberOfRocks : 2,
         enemySpeed : 150
@@ -325,13 +325,13 @@ const gameModel = [
         enemySpeed : 250
     },
     {
-        numberOfEnemies : 7,
+        numberOfEnemies : 6,
         maxGemCount : 2,
         gemTiming : 3,
         spawnSpeed : 1000,
         totalTimeToComplete : 30,
         numberOfRocks : 4,
-        enemySpeed : 275
+        enemySpeed : 250
     }
 
 ];
