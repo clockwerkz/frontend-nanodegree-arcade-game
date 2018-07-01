@@ -260,7 +260,49 @@ const allEnemies = [];
 const player = new Player();
 const allGems = [];
 
+const gameModel = [
+    {
+        numberOfEnemies : 4,
+        maxGemCount : 2,
+        gemTiming : 5,
+        spawnSpeed : 1000,
+        totalTimeToComplete : 30,
+        numberOfRocks : 2
+    },
+    {
+        numberOfEnemies : 5,
+        maxGemCount : 3,
+        gemTiming : 4,
+        spawnSpeed : 800,
+        totalTimeToComplete : 30,
+        numberOfRocks : 3
+    },
+    {
+        numberOfEnemies : 5,
+        maxGemCount : 4,
+        gemTiming : 4,
+        spawnSpeed : 1000,
+        totalTimeToComplete : 30,
+        numberOfRocks : 4
+    },
+    {
+        numberOfEnemies : 5,
+        maxGemCount : 5,
+        gemTiming : 5,
+        spawnSpeed : 500,
+        totalTimeToComplete : 30,
+        numberOfRocks : 5
+    },
+    {
+        numberOfEnemies : 4,
+        maxGemCount : 2,
+        gemTiming : 5,
+        spawnSpeed : 1000,
+        totalTimeToComplete : 30,
+        numberOfRocks : 5
+    }
 
+];
 
 //Game Controller Object
 const gameController = (function(player, allEnemies, allGems) {
@@ -281,10 +323,20 @@ const gameController = (function(player, allEnemies, allGems) {
     let spawnSpeed = 1000;
     let totalTimeToComplete = 30;
     let levelTimer = totalTimeToComplete;
+    let numberOfRocks = 2;
 
     function init (){
         screenView.updateLevelTimer(levelTimer);
-        //createEnemies();
+    }
+
+    function setLevel(gameModelObj) {
+        console.log("setLevel called level",level);
+        numberOfEnemies = gameModelObj.numberOfEnemies;
+        spawnSpeed = gameModelObj.spawnSpeed;
+        maxGemCount = gameModelObj.maxGemCount;
+        gemTiming = gameModelObj.gemTiming;
+        totalTimeToComplete = gameModelObj.totalTimeToComplete;
+        numberOfRocks = gameModelObj.numberOfRocks;
     }
 
     /* Player is Hit by Enemy */
@@ -323,14 +375,25 @@ const gameController = (function(player, allEnemies, allGems) {
     /* At the start of every level, the level number displays briefly before the level begins. This is handled with a 
        setTimeout callback that resets the board and restarts gameplay */
     function levelStart() {
+        screenView.updateCurrentLevel(level);
+        console.log('in levelStart');
+        console.log('level',level)
         screenView.showLevelDisplay();
         createEnemies();
         setTimeout(function() {
             screenView.hideLevelDisplay();
+            resetLevelTimer();
             startClock(levelTimer);
             player.reset();
-            playerCanMove=true;
+            gameStarted = true;
+            playerCanMove = true;
         }, 2000);
+        // setTimeout(function() {
+        //     screenView.hideLevelDisplay();
+        //     startClock(levelTimer);
+        //     player.reset();
+        //     playerCanMove=true;
+        // }, 2000);
     }
 
     
@@ -341,9 +404,9 @@ const gameController = (function(player, allEnemies, allGems) {
         resetLevelTimer();
         deleteGems();
         deleteEnemies();
-        levelStart();
         level+=1;
-        screenView.updateCurrentLevel(level);
+        if (level < gameModel.length) setLevel(gameModel[level-1]);
+        levelStart();
         player.hide();
         playerCanMove = false;
     }
@@ -351,12 +414,12 @@ const gameController = (function(player, allEnemies, allGems) {
     function gameOver() {
         stopClock();
         gameStarted = false;
-        player.reset();
         if (enemySpawnTimer) clearInterval(enemySpawnTimer);
         deleteEnemies();
         deleteGems();
         screenView.updateScores(score);
         screenView.showGameOver();
+        level = 1;
         
     }
 
@@ -369,6 +432,8 @@ const gameController = (function(player, allEnemies, allGems) {
         screenView.showLevelDisplay();
         screenView.showGameBoard();
         player.sprite = characterChoice; 
+        level = 1;
+        setLevel(gameModel[level-1]);
         createEnemies();
         setTimeout(function() {
             screenView.hideLevelDisplay();
@@ -384,25 +449,17 @@ const gameController = (function(player, allEnemies, allGems) {
     }
     
     function gameRestart() {
-        resetLevelTimer();
-        startClock(levelTimer);
         lives = 3;
         score = 0;
         level = 1;
+        setLevel(gameModel[level-1]);
+        resetLevelTimer();
+        player.hide();
         screenView.updateScores(score);
         screenView.updateLifeCounter(lives);
-        screenView.showLevelDisplay();
-        gameStarted=true;
-        createEnemies();
-        startEnemyMovement();
         screenView.redisplayGame();
-        setTimeout(function() {
-            screenView.hideLevelDisplay();
-            resetLevelTimer();
-            startClock(levelTimer);
-            gameStarted = true;
-            playerCanMove = true;
-        }, 2000);
+        console.log('calling levelStart');
+        levelStart();
     }
 
     function hasGameStarted() {
@@ -417,13 +474,13 @@ const gameController = (function(player, allEnemies, allGems) {
         return (Math.floor(Math.random()*4))*83+60;
     }
 
-    function startEnemyMovement () {
-        allEnemies.forEach( enemy => enemy.canMove = true );
-    }
+    // function startEnemyMovement () {
+    //     allEnemies.forEach( enemy => enemy.canMove = true );
+    // }
 
-      function stopAllEnemyMovement() {
-         allEnemies.forEach( enemy => enemy.canMove = false );
-     }
+    //   function stopAllEnemyMovement() {
+    //      allEnemies.forEach( enemy => enemy.canMove = false );
+    //  }
 
     function deleteEnemies() {
         clearInterval(enemySpawnTimer);
@@ -435,11 +492,9 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function createEnemies() {
-        console.log("creating Enemies");
         deleteEnemies();
         let number = numberOfEnemies;
         enemySpawnTimer = setInterval(function() {
-            console.log(number);
             if (number <= 1) clearInterval(enemySpawnTimer);
             allEnemies.push(new Enemy(newLanePos(),150, true));
             number--;
