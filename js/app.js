@@ -254,7 +254,7 @@ class Rock {
     }
 }
 
-const allRocks = [new Rock(100), new Rock(400)];
+const allRocks = [];
 
 const allEnemies = []; 
 const player = new Player();
@@ -262,12 +262,31 @@ const allGems = [];
 
 const gameModel = [
     {
-        numberOfEnemies : 4,
-        maxGemCount : 2,
-        gemTiming : 5,
+        numberOfEnemies : 3,
+        maxGemCount : 3,
+        gemTiming : 4,
         spawnSpeed : 1000,
         totalTimeToComplete : 30,
-        numberOfRocks : 2
+        numberOfRocks : 0,
+        enemySpeed : 75
+    },
+    {
+        numberOfEnemies : 3,
+        maxGemCount : 3,
+        gemTiming : 4,
+        spawnSpeed : 1000,
+        totalTimeToComplete : 30,
+        numberOfRocks : 0,
+        enemySpeed : 75
+    },
+    {
+        numberOfEnemies : 4,
+        maxGemCount : 3,
+        gemTiming : 4,
+        spawnSpeed : 1000,
+        totalTimeToComplete : 30,
+        numberOfRocks : 1,
+        enemySpeed : 150
     },
     {
         numberOfEnemies : 5,
@@ -275,7 +294,8 @@ const gameModel = [
         gemTiming : 4,
         spawnSpeed : 800,
         totalTimeToComplete : 30,
-        numberOfRocks : 3
+        numberOfRocks : 2,
+        enemySpeed : 150
     },
     {
         numberOfEnemies : 5,
@@ -283,23 +303,35 @@ const gameModel = [
         gemTiming : 4,
         spawnSpeed : 1000,
         totalTimeToComplete : 30,
-        numberOfRocks : 4
-    },
+        numberOfRocks : 3,
+        enemySpeed : 200
+        },
     {
         numberOfEnemies : 5,
         maxGemCount : 5,
-        gemTiming : 5,
+        gemTiming : 4,
         spawnSpeed : 500,
         totalTimeToComplete : 30,
-        numberOfRocks : 5
+        numberOfRocks : 4,
+        enemySpeed : 255
     },
     {
-        numberOfEnemies : 4,
+        numberOfEnemies : 6,
         maxGemCount : 2,
-        gemTiming : 5,
+        gemTiming : 3,
         spawnSpeed : 1000,
         totalTimeToComplete : 30,
-        numberOfRocks : 5
+        numberOfRocks : 4,
+        enemySpeed : 250
+    },
+    {
+        numberOfEnemies : 7,
+        maxGemCount : 2,
+        gemTiming : 3,
+        spawnSpeed : 1000,
+        totalTimeToComplete : 30,
+        numberOfRocks : 4,
+        enemySpeed : 275
     }
 
 ];
@@ -323,6 +355,7 @@ const gameController = (function(player, allEnemies, allGems) {
     let spawnSpeed = 1000;
     let totalTimeToComplete = 30;
     let levelTimer = totalTimeToComplete;
+    let enemySpeed = 150;
     let numberOfRocks = 2;
 
     function init (){
@@ -330,13 +363,13 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function setLevel(gameModelObj) {
-        console.log("setLevel called level",level);
         numberOfEnemies = gameModelObj.numberOfEnemies;
         spawnSpeed = gameModelObj.spawnSpeed;
         maxGemCount = gameModelObj.maxGemCount;
         gemTiming = gameModelObj.gemTiming;
         totalTimeToComplete = gameModelObj.totalTimeToComplete;
         numberOfRocks = gameModelObj.numberOfRocks;
+        enemySpeed = gameModelObj.enemySpeed;
     }
 
     /* Player is Hit by Enemy */
@@ -376,10 +409,9 @@ const gameController = (function(player, allEnemies, allGems) {
        setTimeout callback that resets the board and restarts gameplay */
     function levelStart() {
         screenView.updateCurrentLevel(level);
-        console.log('in levelStart');
-        console.log('level',level)
         screenView.showLevelDisplay();
         createEnemies();
+        createRocks();
         setTimeout(function() {
             screenView.hideLevelDisplay();
             resetLevelTimer();
@@ -435,6 +467,7 @@ const gameController = (function(player, allEnemies, allGems) {
         level = 1;
         setLevel(gameModel[level-1]);
         createEnemies();
+        createRocks();
         setTimeout(function() {
             screenView.hideLevelDisplay();
             resetLevelTimer();
@@ -487,6 +520,22 @@ const gameController = (function(player, allEnemies, allGems) {
         while(allEnemies.length) allEnemies.pop();
     }
 
+    function createRocks() {
+        let rockCount = numberOfRocks;
+        deleteRocks();
+        let rockLocations = [0,100,200,300,400];
+        while (rockCount>0) {
+            let randomLane = Math.floor(Math.random()*rockLocations.length);
+            allRocks.push(new Rock(rockLocations[randomLane]));
+            rockLocations.splice(randomLane, 1);
+            rockCount--;   
+        }
+    } 
+
+    function deleteRocks() {
+        while(allRocks.length) allRocks.pop();
+    }
+
     function deleteGems() {
         while(allGems.length) allGems.pop();
     }
@@ -496,7 +545,7 @@ const gameController = (function(player, allEnemies, allGems) {
         let number = numberOfEnemies;
         enemySpawnTimer = setInterval(function() {
             if (number <= 1) clearInterval(enemySpawnTimer);
-            allEnemies.push(new Enemy(newLanePos(),150, true));
+            allEnemies.push(new Enemy(newLanePos(),enemySpeed, true));
             number--;
         }, spawnSpeed);
     }

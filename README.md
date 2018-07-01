@@ -22,13 +22,14 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [X] Gem Collision/Scoring
 - [x] Game Over Modal
 - [x] Add Rocks/Obstacles
+- [ ] Instantiate more rocks per level
 - ~~[ ] Gameplay: Levels? Refine Game mechanics (Break this category up)~~
 - [X] Add Game Countdown Clock
 - [X] Add level start/end mechanic
 - [X] If Time runs out, game is over
-- [ ] Change Lives remaining to be hearts displayed
-- [ ] Style the scoreboard
-- [ ] Paint arrow indicators on the last row of stone blocks
+- ~~[ ] Change Lives remaining to be hearts displayed~~
+- ~~[ ] Style the scoreboard~~
+- ~~[ ] Paint arrow indicators on the last row of stone blocks~~
 - [X] Spawn Enemies in Intervals
 
 - [X] Refactor JavaScript code:
