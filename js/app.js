@@ -17,10 +17,12 @@ const screenView = (function() {
     const gameStart = document.getElementById('game-start'); 
     const gameScreen = document.getElementById('game-screen');
     const gameOver = document.getElementById('game-over');
+    const gameLevel = document.getElementById('game-level');
 
     /* Score, Countdown Timer, and lives */
     const scoreInfo = document.querySelectorAll('.score-info');
     const livesCount = document.querySelector('.life-count');
+    const currentLevel = document.querySelector('.current-level');
     const levelTimer = document.querySelector('.level-timer')
 
     function showGameBoard () {
@@ -28,8 +30,20 @@ const screenView = (function() {
         gameScreen.classList.toggle('hide');  
     }
 
+    function showLevelDisplay(){
+        gameLevel.classList.toggle('hide');
+    }
+
+    function hideLevelDisplay() {
+        gameLevel.classList.toggle('hide');
+    }
+
     const updateLifeCounter = (lives)=> {
         livesCount.textContent = lives;
+    }
+
+    const updateCurrentLevel = (level)=> {
+        currentLevel.textContent = level;
     }
 
     const updateLevelTimer = (time) => {
@@ -57,7 +71,10 @@ const screenView = (function() {
         showGameBoard,
         showGameOver,
         redisplayGame,
-        updateLevelTimer
+        updateLevelTimer,
+        hideLevelDisplay,
+        showLevelDisplay,
+        updateCurrentLevel
     };
 
 })();
@@ -92,6 +109,14 @@ class Player {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
+    /* Hides character offscreen during level display */
+    hide() {
+        this.x = -100;
+        this.y = -100;
+        this.yTarget = -100;
+        this.xTarget = -100;
+    }
+
     reset() {
         this.x = 200;
         this.y = 380;
@@ -124,7 +149,7 @@ class Player {
                     break;
                 case('down'):
                     if (!this.checkForRocks(0, 80)) {
-                        if (this.yTarget < 400) this.yTarget+=80;
+                        if (this.yTarget < 380) this.yTarget+=80;
                     }
                 }       
         }
@@ -175,7 +200,7 @@ class Gem{
 //Enemies our player must avoid
 class Enemy {
     constructor(startingY,speed, canMove) {
-        this.x = -100;
+        this.x = -100;                           
         this.y = startingY;
         this.height=60;
         this.width=50;
@@ -239,9 +264,11 @@ const allGems = [];
 
 //Game Controller Object
 const gameController = (function(player, allEnemies, allGems) {
-    let lives = 3;
+    let lives = 3;  
     let score = 0;
+    let level = 1;
     gameStarted = false;
+    playerCanMove = false;
     numberOfEnemies = 4;
     laneScore = 100;
     let clock = 0;
@@ -270,12 +297,13 @@ const gameController = (function(player, allEnemies, allGems) {
             player.reset();
         }
     }
-
+    /* Starts with a random choice of gem_color from array gemCOlors, and then returns an instantiaion of a new Gem */
     function createGem() {
         let randomColor = Math.floor(Math.random()*gemColors.length);
         return new Gem(gemColors[randomColor],newLanePosX(),newLanePos() );
     }
 
+    /* Checks if gem array is not at max gem count. If not, calls for a new gem and pusnes it into array of allGems */
     function gemSpawn() {
         if (clock%gemTiming===0 && allGems.length<maxGemCount) {
             createGem();
@@ -283,6 +311,7 @@ const gameController = (function(player, allEnemies, allGems) {
         }
     }
 
+    /* If a gem is collected, deletes the gem and updates the score */
     function gemCollected(gem) {
         let index = allGems.indexOf(gem);
         allGems.splice(index, 1);
@@ -291,14 +320,32 @@ const gameController = (function(player, allEnemies, allGems) {
 
     }
 
+    /* At the start of every level, the level number displays briefly before the level begins. This is handled with a 
+       setTimeout callback that resets the board and restarts gameplay */
+    function levelStart() {
+        screenView.showLevelDisplay();
+        createEnemies();
+        setTimeout(function() {
+            screenView.hideLevelDisplay();
+            startClock(levelTimer);
+            player.reset();
+            playerCanMove=true;
+        }, 2000);
+    }
+
+    
     function laneClearedScore() {
         score+=laneScore;
         stopClock();
         screenView.updateScores(score);
         resetLevelTimer();
         deleteGems();
-        player.reset();
-        startClock(levelTimer);
+        deleteEnemies();
+        levelStart();
+        level+=1;
+        screenView.updateCurrentLevel(level);
+        player.hide();
+        playerCanMove = false;
     }
 
     function gameOver() {
@@ -319,12 +366,21 @@ const gameController = (function(player, allEnemies, allGems) {
     }
 
     function gameStart(characterChoice) {
-        resetLevelTimer();
-        startClock(levelTimer);
-        player.sprite = characterChoice; 
+        screenView.showLevelDisplay();
         screenView.showGameBoard();
-        gameStarted = true;
+        player.sprite = characterChoice; 
         createEnemies();
+        setTimeout(function() {
+            screenView.hideLevelDisplay();
+            resetLevelTimer();
+            startClock(levelTimer);
+            gameStarted = true;
+            playerCanMove = true;
+        }, 2000);
+    }
+
+    function canPlayerMove() {
+        return playerCanMove;
     }
     
     function gameRestart() {
@@ -332,12 +388,21 @@ const gameController = (function(player, allEnemies, allGems) {
         startClock(levelTimer);
         lives = 3;
         score = 0;
+        level = 1;
         screenView.updateScores(score);
         screenView.updateLifeCounter(lives);
+        screenView.showLevelDisplay();
         gameStarted=true;
         createEnemies();
         startEnemyMovement();
         screenView.redisplayGame();
+        setTimeout(function() {
+            screenView.hideLevelDisplay();
+            resetLevelTimer();
+            startClock(levelTimer);
+            gameStarted = true;
+            playerCanMove = true;
+        }, 2000);
     }
 
     function hasGameStarted() {
@@ -361,6 +426,7 @@ const gameController = (function(player, allEnemies, allGems) {
      }
 
     function deleteEnemies() {
+        clearInterval(enemySpawnTimer);
         while(allEnemies.length) allEnemies.pop();
     }
 
@@ -413,7 +479,8 @@ const gameController = (function(player, allEnemies, allGems) {
         laneClearedScore,
         newLanePos,
         init,
-        gemCollected
+        gemCollected,
+        canPlayerMove
     }
 })(player, allEnemies, allGems);
 
@@ -453,6 +520,6 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-    if (gameController.hasGameStarted()) player.handleInput(allowedKeys[e.keyCode]);
+    if (gameController.hasGameStarted() && gameController.canPlayerMove()) player.handleInput(allowedKeys[e.keyCode]);
 
 });
