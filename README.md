@@ -24,7 +24,7 @@ This is my repository for Udacity's GitHub Project #3, the classic arcade game c
 - [x] Add Rocks/Obstacles
 - ~~[ ] Gameplay: Levels? Refine Game mechanics (Break this category up)~~
 - [X] Add Game Countdown Clock
-- [ ] Add level start/end mechanic
+- [X] Add level start/end mechanic
 - [X] If Time runs out, game is over
 - [ ] Change Lives remaining to be hearts displayed
 - [ ] Style the scoreboard
