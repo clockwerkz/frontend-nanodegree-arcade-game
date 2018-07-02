@@ -54,9 +54,13 @@ const screenView = (function() {
         scoreInfo.forEach( scoreScreen => scoreScreen.textContent = score );
     }
 
-    const showGameOver = () => {
+    const showGameOver = (score) => {
         gameScreen.classList.toggle('hide');
         gameOver.classList.toggle('hide');
+        let highScores = localStorage.getItem('bugsHighScore');
+        if (highScores) {
+    
+        }
     }
 
     const redisplayGame = () => {
@@ -450,7 +454,7 @@ const gameController = (function(player, allEnemies, allGems) {
         deleteEnemies();
         deleteGems();
         screenView.updateScores(score);
-        screenView.showGameOver();
+        screenView.showGameOver(score);
         level = 1;
         
     }
