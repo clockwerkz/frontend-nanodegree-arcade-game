@@ -59,19 +59,22 @@
 
     <!-- GAME OVER SCREEN -->
 
-    <div class="hidee" id="game-over">
+    <div class="hide" id="game-over">
         <div class="modal-body">
             <h1>Game Over!</h1>
             <p>Final Score is: <span class="score-info">Score</span></p>
             <a class="btn">Play Again?</a>
+            <div class="high-scores">
             <h3>High Scores</h3>
-            <ul class="high-scores">
-                <li><span class="name">Mamua:</span><span class="score">2000</span></li>
-                <li><span class="name">Papua:</span> <span class="score">2000</span></li>
-                <li><span class="name">Noah:</span> <span class="score">2000</span></li>
-                <li><span class="name">Maximo:</span> <span class="score">2000</span></li>
-            </ul>
-            <form class="new-score">
+                <ul>
+                    <li><span class="name">Mamua:</span><span class="score">2000</span></li>
+                    <li><span class="name">Papua:</span> <span class="score">2000</span></li>
+                    <li><span class="name">Noah:</span> <span class="score">2000</span></li>
+                    <li><span class="name">Maximo:</span> <span class="score">2000</span></li>
+                </ul>
+            </div> <!-- .high-scores -->
+            <form id="new-score" class="hide">
+                <h2>New High Score!</h2>
                 <input type="text" name="player" />
                 <button type="submit">Submit</button>
             </form>

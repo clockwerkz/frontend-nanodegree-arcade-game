@@ -23,7 +23,12 @@ const screenView = (function() {
     const scoreInfo = document.querySelectorAll('.score-info');
     const livesCount = document.querySelector('.life-count');
     const currentLevel = document.querySelector('.current-level');
-    const levelTimer = document.querySelector('.level-timer')
+    const levelTimer = document.querySelector('.level-timer');
+    const newScore = document.querySelector('#new-score');
+    const highScores = document.querySelector('.high-scores');
+    const maxHighScoreCount = 5; //Tracks the maximum amount of high scores
+    let newHighScore;
+    let scoresArray = [];
 
     function showGameBoard () {
         gameStart.classList.toggle('hide');
@@ -55,12 +60,62 @@ const screenView = (function() {
     }
 
     const showGameOver = (score) => {
+        newHighScore = score;
         gameScreen.classList.toggle('hide');
         gameOver.classList.toggle('hide');
         let highScores = localStorage.getItem('bugsHighScore');
         if (highScores) {
-    
+            scoresArray = JSON.parse(highScores);
+            scoresArray.sort((a,b) => a.score < b.score );
+            let lastElement = scoresArray.length-1;
+            if (newHighScore > scoresArray[lastElement].score || scoresArray.length<maxHighScoreCount) {
+                showNameFormEntry();
+            } else {
+                showHighScores();
+            }
+        } else {
+            console.log("No existing High Scores");
+            showNameFormEntry();
+            //Display submit form to capture the new score's attributed Name
+            //add score to the array
         }
+    }
+
+    const newNameSubmit = (name) => {
+        const newPlayer = {
+            name,
+            score : newHighScore
+        }
+        if (scoresArray.length < maxHighScoreCount) {
+            scoresArray.push(newPlayer);
+        } else {
+            scoresArray.pop();
+            scoresArray.push(newPlayer);
+        }
+        showHighScores();
+        
+    }
+
+    const showHighScores = () => {
+        newScore.classList.add('hide');
+        scoresArray.sort((a,b) => a.score < b.score );
+        console.log(scoresArray);
+        const scoresList = highScores.querySelector('ul');
+        scoresList.innerHTML = '';
+        scoresArray.forEach((score) => {
+            scoresList.innerHTML+=`<li><span class="name">${score.name}:</span><span class="score">${score.score}</span></li>`;
+        });
+        highScores.classList.remove('hide');
+        storeHighScores();
+    }
+
+    const showNameFormEntry = () => {
+        highScores.classList.add('hide');
+        newScore.classList.remove('hide');        
+    }
+
+    const storeHighScores = () => {
+        localStorage.setItem('bugsHighScore', JSON.stringify(scoresArray));
     }
 
     const redisplayGame = () => {
@@ -78,7 +133,8 @@ const screenView = (function() {
         updateLevelTimer,
         hideLevelDisplay,
         showLevelDisplay,
-        updateCurrentLevel
+        updateCurrentLevel,
+        newNameSubmit
     };
 
 })();
@@ -264,6 +320,8 @@ const allEnemies = [];
 const player = new Player();
 const allGems = [];
 
+//This array of objects provides individual level states for levels 1-8. After 8, the the level count will still continue but the difficulty
+//remains at level 8.
 const gameModel = [
     {
         numberOfEnemies : 3,
@@ -424,15 +482,9 @@ const gameController = (function(player, allEnemies, allGems) {
             gameStarted = true;
             playerCanMove = true;
         }, 2000);
-        // setTimeout(function() {
-        //     screenView.hideLevelDisplay();
-        //     startClock(levelTimer);
-        //     player.reset();
-        //     playerCanMove=true;
-        // }, 2000);
     }
 
-    
+    /* When the player successfully reaches the top lane, this function updates the game state.  */
     function laneClearedScore() {
         score+=laneScore;
         stopClock();
@@ -441,12 +493,13 @@ const gameController = (function(player, allEnemies, allGems) {
         deleteGems();
         deleteEnemies();
         level+=1;
-        if (level < gameModel.length) setLevel(gameModel[level-1]);
-        levelStart();
+        if (level < gameModel.length) setLevel(gameModel[level-1]); //Finite amount of levels provided, this check
+        levelStart();                                               //keeps the level state at the last level provided
         player.hide();
         playerCanMove = false;
     }
 
+    /* When the clock runs out or player loses all 3 lives, call up the game over screen and delete/clear game assets */
     function gameOver() {
         stopClock();
         gameStarted = false;
@@ -464,6 +517,7 @@ const gameController = (function(player, allEnemies, allGems) {
         screenView.updateLevelTimer(levelTimer);
     }
 
+    /* Called when the game begins */
     function gameStart(characterChoice) {
         screenView.showLevelDisplay();
         screenView.showGameBoard();
@@ -481,6 +535,7 @@ const gameController = (function(player, allEnemies, allGems) {
         }, 2000);
     }
 
+    //used to expose the playerCanMove boolean value to the event listener for the controller
     function canPlayerMove() {
         return playerCanMove;
     }
@@ -495,7 +550,6 @@ const gameController = (function(player, allEnemies, allGems) {
         screenView.updateScores(score);
         screenView.updateLifeCounter(lives);
         screenView.redisplayGame();
-        console.log('calling levelStart');
         levelStart();
     }
 
@@ -630,4 +684,10 @@ document.addEventListener('keyup', function(e) {
     };
     if (gameController.hasGameStarted() && gameController.canPlayerMove()) player.handleInput(allowedKeys[e.keyCode]);
 
+});
+
+document.getElementById('new-score').addEventListener('submit', (e)=> {
+    e.preventDefault();
+    const newName =  document.querySelector('input');
+    screenView.newNameSubmit(newName.value);
 });

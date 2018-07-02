@@ -107,25 +107,45 @@ body {
     line-height: 110px;
 }
 
-#game-over ul.high-scores {
+#game-over .btn {
+    margin: 10px auto 40px auto;
+}
+
+#game-over .high-scores ul {
     list-style: none;
     width: 300px;
     margin: 0 auto;
     padding: 0;
 }
 
-#game-over ul.high-scores li {
+#game-over .high-scores li {
     padding: 0;
     margin: 0;
     display: flex;
     justify-content: space-between;
+    font-size: 1.3em;
+    line-height: 1.5em;
 }
 
-#game-over ul.highscores li .name {
+#game-over input {
+    border: none;
+    font-size: 1.2em;
+    padding: 5px 5px;
+}
+
+#game-over button {
+    background-color: #0566e6;
+    color: #fff;
+    font-size: 1.2em;
+    border: none;
+    padding: 5px 15px;
+}
+
+#game-over .highscores li .name {
     text-align: left;
 }
 
-#game-over ul.highscores li .score {
+#game-over .highscores li .score {
     text-align: right;
 }
 
