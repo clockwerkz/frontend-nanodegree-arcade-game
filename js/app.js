@@ -12,6 +12,7 @@
 ********************************************************************************/
 
 // View Object
+// The screenView Object controls the display of the character selection, gameboard, level and game over screens.
 const screenView = (function() {
     /* Main Screen Display */
     const gameStart = document.getElementById('game-start'); 
@@ -30,6 +31,7 @@ const screenView = (function() {
     let newHighScore;
     let scoresArray = [];
 
+    //Functions that control the displaying and hiding of various screens
     function showGameBoard () {
         gameStart.classList.toggle('hide');
         gameScreen.classList.toggle('hide');  
@@ -59,28 +61,30 @@ const screenView = (function() {
         scoreInfo.forEach( scoreScreen => scoreScreen.textContent = score );
     }
 
+    //this function has the localStorage high score logic
     const showGameOver = (score) => {
         newHighScore = score;
         gameScreen.classList.toggle('hide');
         gameOver.classList.toggle('hide');
-        let highScores = localStorage.getItem('bugsHighScore');
-        if (highScores) {
-            scoresArray = JSON.parse(highScores);
-            scoresArray.sort((a,b) => a.score < b.score );
-            let lastElement = scoresArray.length-1;
+        let highScores = localStorage.getItem('bugsHighScore'); //Grab localStorage high scores
+        if (highScores) { //if highScores do exist on local storage
+            scoresArray = JSON.parse(highScores); 
+            scoresArray.sort((a,b) => a.score < b.score ); 
+            let lastElement = scoresArray.length-1; 
+            //if the current High score is higher than the last score in the record, or if the length of the array is 
+            //less than the max amount of scores tracked, display the form to capture the name of player
             if (newHighScore > scoresArray[lastElement].score || scoresArray.length<maxHighScoreCount) {
                 showNameFormEntry();
             } else {
                 showHighScores();
             }
         } else {
-            console.log("No existing High Scores");
+            //if there isn't a localStorage of high scores, display form to capture name
             showNameFormEntry();
-            //Display submit form to capture the new score's attributed Name
-            //add score to the array
         }
     }
 
+    //This is called when the form is submitted with a name for the high score
     const newNameSubmit = (name) => {
         const newPlayer = {
             name,
@@ -95,7 +99,7 @@ const screenView = (function() {
         showHighScores();
         
     }
-
+    //Displays all high scores in an unordered list
     const showHighScores = () => {
         newScore.classList.add('hide');
         scoresArray.sort((a,b) => a.score < b.score );
@@ -147,21 +151,19 @@ class Player {
         this.sprite = 'images/char-boy.png';
         this.x = 200;
         this.y = 380;
-        this.yTarget=380;
-        this.xTarget=200;
-        // this.injured = false;
-        // this.lives = 3;
-        // this.score = 0;
+        this.yTarget=380;   // yTarget and xTarget are used to anticipate the new location of the player when 
+        this.xTarget=200;   // Input is recieved. Instead of the player popping to the new location, they translate to it.
         this.width = 50;
         this.height = 40; 
     }
 
     update() {
+        //Update tracks if player's x and y match the x and yTarget values, if not, increment x or y until it matches.
         if (this.y > this.yTarget) this.y= this.y-5;
         if (this.y < this.yTarget) this.y= this.y+5;
         if (this.x > this.xTarget) this.x= this.x-5;
         if (this.x < this.xTarget) this.x= this.x+5;
-        if (this.x === this.xTarget && this.y === this.yTarget) this.isMoving = false;
+        if (this.x === this.xTarget && this.y === this.yTarget) this.isMoving = false; //used to prevent multiple inputs at once
         
     }
 
@@ -176,7 +178,7 @@ class Player {
         this.yTarget = -100;
         this.xTarget = -100;
     }
-
+    //resets character back to the bottom of the screen
     reset() {
         this.x = 200;
         this.y = 380;
@@ -184,6 +186,7 @@ class Player {
         this.xTarget=200;
     }
 
+    //handleInput checks to make sure player is within the boundaries of the game, and also checks for rock collisions
     handleInput(keyCode) {
         if (!this.isMoving) {
             this.isMoving = true;
@@ -215,6 +218,7 @@ class Player {
         }
     }
 
+    //breaking out the collision check for Rocks into it's own function
     checkForRocks(x, y) {
         let rockPresent = false;
         allRocks.forEach(function(rock) {
@@ -240,6 +244,7 @@ class Gem{
         this.width=50;   
     }
 
+    //update checks for player collisions
     update(dt) {
         if ( 
                 (this.x < player.x + player.width ) &&
@@ -248,7 +253,7 @@ class Gem{
                 (this.y + this.height > player.y) 
             )
             {
-                gameController.gemCollected(this);
+                gameController.gemCollected(this);  //called to delete the current gem and to update the score
             }
     } 
 
@@ -269,7 +274,7 @@ class Enemy {
         this.sprite = 'images/enemy-bug.png';
         this.speed = speed || 200;
     }
-
+    //update checks for player collisions
     update(dt) {
         if (this.canMove)
         {
@@ -286,7 +291,7 @@ class Enemy {
                 (this.y + this.height > player.y) 
                )
             {
-                gameController.playerHit();
+                gameController.playerHit(); //called to record a player hit and update lives
             }
         }
     }   
@@ -511,7 +516,7 @@ const gameController = (function(player, allEnemies, allGems) {
         level = 1;
         
     }
-
+    /* resets the timer */
     function resetLevelTimer() {
         levelTimer = totalTimeToComplete;
         screenView.updateLevelTimer(levelTimer);
@@ -553,25 +558,19 @@ const gameController = (function(player, allEnemies, allGems) {
         levelStart();
     }
 
+    //used to expose the whether the game is running or not
     function hasGameStarted() {
         return gameStarted;
     }
 
+    //helper function to create a random lane location for the gems
     function newLanePosX() {
         return (Math.floor(Math.random()*5))*100;
     }
-
+    //helper function to create a random y location for enemies and gems
     function newLanePos() {
         return (Math.floor(Math.random()*4))*83+60;
     }
-
-    // function startEnemyMovement () {
-    //     allEnemies.forEach( enemy => enemy.canMove = true );
-    // }
-
-    //   function stopAllEnemyMovement() {
-    //      allEnemies.forEach( enemy => enemy.canMove = false );
-    //  }
 
     function deleteEnemies() {
         clearInterval(enemySpawnTimer);
@@ -601,7 +600,7 @@ const gameController = (function(player, allEnemies, allGems) {
     function createEnemies() {
         deleteEnemies();
         let number = numberOfEnemies;
-        enemySpawnTimer = setInterval(function() {
+        enemySpawnTimer = setInterval(function() { //Enemies are spawned in intervals
             if (number <= 1) clearInterval(enemySpawnTimer);
             allEnemies.push(new Enemy(newLanePos(),enemySpeed, true));
             number--;
@@ -621,7 +620,6 @@ const gameController = (function(player, allEnemies, allGems) {
         }
     }
 
-
     function stopClock() {
         if (clockRunning) clearInterval(clockRunning);
         isClockRunning = false;
@@ -632,7 +630,7 @@ const gameController = (function(player, allEnemies, allGems) {
         clock = 0;
     }
 
-
+    //exposes certain functions
     return {
         gameStart,
         playerHit,
