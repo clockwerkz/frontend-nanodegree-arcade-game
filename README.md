@@ -1,17 +1,28 @@
 # BUGS -N- GEMS GAME
-###By Carlos Fins 
+### By Carlos Fins 
 
 Grab the gems. Avoid the bugs. Profit!
 
-## Instructions / Where to Play
-
 Play it here! [Bugs -N- Gems](https://clockwerkz.github.io/frontend-nanodegree-arcade-game/)
+
+##How to Insall the Game Locally
+
+Simply click on the green "Clone or Download" button above to download a local copy of the game in order to play. Once downloaded or installed, simply open the index.html file in a web browser to play. Alternatively, the game can be played on the live version: [Bugs -N- Gems](https://clockwerkz.github.io/frontend-nanodegree-arcade-game/).
+
+
+## How To Play
+
 
 The object of the game is to collect as many gems as possible in each level and escape out the top of the level before the time expires. Avoid the bugs! Everytime a player is hit by a bug, they lose one life and reset back to the bottom. *If the timer runs out, or the player loses all 3 lives, the game is over!* A local High Score tracker keeps track of players best achievements. Try and get the best possible score!
 
-## Classic Arcade Game Clone Udacity Project #3
+## Game Design
 
-This is my repository for Udacity's GitHub Project #3, the classic arcade game clone. The project involves using a provided basic game engine (utilizes HTML Canvas) to create game assets, and provide the logic and control for these assets.
+![](screenshots/character_select.PNG)
+The player selection screen when the game first starts
+
+I incorporated a timer into the game in order to create a new challenge for the player: exit the level before the time runs out or the game ends. In order to have levels that incrementally get harder, I create a gameModel object that is an array of objects with various properties and values to use in the game controller. For example, numberOfEnemies controls how many bugs will spawn, gemTiming controls the time between gem spawning, etc. As the levels progress, I also introduced rocks to hinder the player's escape. 
+
+Finally, I brought an idea I wanted to implement in my memory game in for this project: using localStorage to keep track of high scores.
 
 
 ## Dependencies
