@@ -143,18 +143,27 @@ const screenView = (function() {
 
 })();
 
+class Entity {
+    constructor(x, y, width, height, sprite) {
+        this.sprite = sprite,
+        this.x = x,
+        this.y = y,
+        this.width = width,
+        this.height = height
+    }
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+}
 
 //Player Class
-class Player {
+class Player extends Entity {
     constructor() {
+        super(200, 300, 50, 40, 'images/char-boy.png');
         this.isMoving = false;
-        this.sprite = 'images/char-boy.png';
-        this.x = 200;
-        this.y = 380;
         this.yTarget=380;   // yTarget and xTarget are used to anticipate the new location of the player when 
         this.xTarget=200;   // Input is recieved. Instead of the player popping to the new location, they translate to it.
-        this.width = 50;
-        this.height = 40; 
     }
 
     update() {
@@ -165,10 +174,6 @@ class Player {
         if (this.x < this.xTarget) this.x= this.x+5;
         if (this.x === this.xTarget && this.y === this.yTarget) this.isMoving = false; //used to prevent multiple inputs at once
         
-    }
-
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
     /* Hides character offscreen during level display */
@@ -235,13 +240,9 @@ class Player {
     
 }
 
-class Gem{
+class Gem extends Entity{
     constructor(gem_type, x, y) {
-        this.sprite = gem_type;
-        this.x = x;
-        this.y = y;
-        this.height=60;
-        this.width=50;   
+        super(x, y, 50, 60, gem_type)
     }
 
     //update checks for player collisions
@@ -256,19 +257,12 @@ class Gem{
                 gameController.gemCollected(this);  //called to delete the current gem and to update the score
             }
     } 
-
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
 }
 
 //Enemies our player must avoid
-class Enemy {
+class Enemy extends Entity {
     constructor(startingY,speed, canMove) {
-        this.x = -100;                           
-        this.y = startingY;
-        this.height=60;
-        this.width=50;
+        super(-100, startingY, 50, 60,'images/enemy-bug.png');
         this.canMove = canMove || false;
         this.startingY = startingY;
         this.sprite = 'images/enemy-bug.png';
@@ -295,27 +289,14 @@ class Enemy {
             }
         }
     }   
-
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
 }
 
-class Rock {
+class Rock extends Entity{
     constructor(x){
-        this.x =x;
-        this.y = -20;
-        this.sprite = 'images/Rock.png';
-        this.width = 100;
-        this.height = 43;
+        super(x, -20, 100, 43, 'images/Rock.png');
     }
 
     update() {
-
-    }
-    
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 }
 
